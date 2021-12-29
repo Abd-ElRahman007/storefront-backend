@@ -8,7 +8,8 @@
     "watch": "npx tsc-watch --esModuleInterop src/server.ts --outDir ./dist ",
     "migrate": "npx db-migrate --env test up npx db-migrate up",
     "test": "ENV=test db-migrate --env test up && npx jasmine-ts && db-migrate --env test down",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "lint": "npx eslint --ext .ts **/*.ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -32,9 +33,13 @@
     "@types/jsonwebtoken": "^8.5.6",
     "@types/pg": "^8.6.3",
     "@types/supertest": "^2.0.11",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jasmine": "^3.10.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
+    "prettier": "^2.5.1",
     "supertest": "^6.1.6",
     "ts-node": "^10.4.0",
     "tsc-watch": "^4.6.0",
