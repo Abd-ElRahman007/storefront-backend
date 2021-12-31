@@ -18,3 +18,4 @@ app.get('/', (req: Request, res: Response): void => {
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`)
 })
+export default app;
