@@ -4,6 +4,11 @@ import jwt from 'jsonwebtoken';
 
 const store: UsersStore = new UsersStore();
 
+const index = async (req: Request, res: Response): Promise<void> => {
+  const users = await store.index();
+  res.json(users);
+};
+
 const show = async (req: Request, res: Response): Promise<void> => {
   const user = await store.show((req.body.username as unknown) as string);
   res.json(user);
@@ -64,9 +69,10 @@ const delete_ = async (req: Request, res: Response): Promise<void> => {
   }
 }
 const users_routes = (app: express.Application): void => {
+  app.get('/users', index);
   app.get('/users/show', show);
   app.post('/users/create', create)
-  app.post('/users/update', update);
+  app.put('/users/update', update);
   app.get('/users/auth', authenticate);
   app.delete('/users/delete', delete_);
 }
