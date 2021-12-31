@@ -21,7 +21,9 @@ describe('users store model', (): void => {
   it('should delete method be defined', (): void => {
     expect(store.delete).toBeDefined();
   });
-  it('should create methode create a user', async (done): Promise<void> => {
+})
+describe('users store handlers', (): void => {
+  it('should create method create a user', async (done): Promise<void> => {
     const user = {
       username: 'test',
       password: 'test',
