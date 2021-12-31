@@ -22,26 +22,24 @@ const create = async (req: Request, res: Response): Promise<void> => {
   try {
     const newUser = await store.create(user);
     var token = jwt.sign({ user: newUser }, process.env.JWT_SECRET as string);
-    res.json(newUser);
+    res.json(token);
   } catch (error) {
     res.status(400);
-    res.json(error as string + user);
+    res.json(error as string);
   }
 }
 const update = async (req: Request, res: Response): Promise<void> => {
   const user = {
     username: req.body.username as string,
-    password: req.body.password as string
-  };
-  const userNew = {
-    username: req.body.usernameNew as string
+    password: req.body.password as string,
+    userNew: req.body.usernameNew as string
   };
   try {
-    const newUser = await store.update(user, userNew);
+    const newUser = await store.update(user);
     res.json(newUser);
   } catch (error) {
     res.status(400);
-    res.json(error as string + user);
+    res.json(error as string);
   }
 }
 const authenticate = async (req: Request, res: Response): Promise<void> => {
@@ -52,20 +50,21 @@ const authenticate = async (req: Request, res: Response): Promise<void> => {
   try {
     const newUser = await store.authenticate(user.username, user.password);
     var token = jwt.sign({ user: newUser }, process.env.JWT_SECRET as string);
-    res.json(token);
+    res.json(`Authenticated`);
   } catch (error) {
     res.status(401);
-    res.json(error as string + user);
+    res.json(`${error}`);
   };
 };
 const delete_ = async (req: Request, res: Response): Promise<void> => {
   const username = req.body.username as string;
   try {
     const user = await store.delete(username);
-    res.json(user);
+    res.status(200);
+    res.json('deleted');
   } catch (error) {
     res.status(400);
-    res.json(error as string + username);
+    res.json(`${error}`);
   }
 }
 const users_routes = (app: express.Application): void => {

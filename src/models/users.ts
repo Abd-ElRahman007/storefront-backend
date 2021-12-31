@@ -6,26 +6,35 @@ const saltRounds = process.env.SALT_ROUNDS;
 const pepper = process.env.BCRYPT_PASSWORD;
 
 export type user = {
+  userNew?: string;
   username: string;
   password?: string;
   email?: string;
 };
 export class UsersStore {
   async index(): Promise<user[]> {
-    const conn: PoolClient = await client.connect();
     const sql = 'SELECT * FROM users';
+    const conn: PoolClient = await client.connect();
     const result = await conn.query(sql);
     const users = result.rows;
     conn.release();
     return users;
   }
   async show(username: string): Promise<user | null> {
-    const conn: PoolClient = await client.connect();
+    if (!username) {
+      throw new Error('username is required');
+    }
     const sql = 'SELECT * FROM users WHERE username = $1';
+    const conn: PoolClient = await client.connect();
     const result = await conn.query(sql, [username]);
-    const users = result.rows[0];
-    conn.release();
-    return users;
+    if (result.rows.length) {
+      const user = result.rows[0];
+      conn.release();
+      return user;
+    } else {
+      conn.release();
+      return null;
+    }
   }
   async create(u: user): Promise<user> {
     if (!u.username || !u.password || !u.email) {
@@ -50,9 +59,12 @@ export class UsersStore {
       }
     }
   }
-  async update(u: user, uNew: user): Promise<user> {
+  async update(u: user): Promise<user> {
     if (!u.username || !u.password) {
       throw new Error('username and password are required');
+    }
+    if (!await this.authenticate(u.username, u.password)) {
+      throw new Error('entered password is incorrect');
     }
     if (!await this.show(u.username)) {
       throw new Error('username does not exist');
@@ -60,11 +72,11 @@ export class UsersStore {
       try {
         const user = {
           username: u.username,
-          password: bcrypt.hashSync(u.password + pepper, parseInt((saltRounds as unknown) as string))
+          usernameNew: u.userNew
         };
-        const sql = 'UPDATE users SET username = $1, password = $2 WHERE username = $3 RETURNING *';
+        const sql = 'UPDATE users SET username = $1 WHERE username = $2 RETURNING *';
         const conn: PoolClient = await client.connect();
-        const result = await conn.query(sql, [user.username, user.password, uNew.username]);
+        const result = await conn.query(sql, [user.usernameNew, user.username]);
         conn.release();
         return result.rows[0];
       } catch (error) {
@@ -112,7 +124,7 @@ export class UsersStore {
           }
         }
       } catch (error) {
-        throw new Error(`cannot authenticate user ${username}. error: ${error}`);
+        throw new Error(`cannot authenticate user ${username}. ${error}`);
       }
       return null;
     }
