@@ -11,11 +11,11 @@ export type user = {
   email?: string;
 };
 export class UsersStore {
-  async index(): Promise<user> {
+  async index(): Promise<user[]> {
     const conn: PoolClient = await client.connect();
     const sql = 'SELECT * FROM users';
     const result = await conn.query(sql);
-    const users = result.rows[0];
+    const users = result.rows;
     conn.release();
     return users;
   }
