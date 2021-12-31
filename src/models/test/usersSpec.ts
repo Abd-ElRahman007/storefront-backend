@@ -31,4 +31,14 @@ describe('users store model', (): void => {
     expect(result.status).toBe(200);
     done();
   });
+  it('should delete method delete a user', async (done): Promise<void> => {
+    const user = {
+      username: 'test',
+      password: 'test',
+      email: 'test'
+    };
+    const result = await request.delete('/users/delete').send(user);
+    expect(result.status).toBe(200);
+    done();
+  });
 })
