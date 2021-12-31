@@ -21,11 +21,14 @@ describe('users store model', (): void => {
   it('should delete method be defined', (): void => {
     expect(store.delete).toBeDefined();
   });
-  it('should show method return a user', async (): Promise<void> => {
-    expect(await store.show('test')).toEqual({
+  it('should create methode create a user', async (done): Promise<void> => {
+    const user = {
       username: 'test',
-      email: 'test',
       password: 'test',
-    });
+      email: 'test'
+    };
+    const result = await request.post('/users').send(user);
+    expect(result.status).toBe(200);
+    done();
   });
 })
