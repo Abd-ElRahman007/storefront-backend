@@ -27,7 +27,7 @@ describe('users store model', (): void => {
       password: 'test',
       email: 'test'
     };
-    const result = await request.post('/users').send(user);
+    const result = await request.post('/users/create').send(user);
     expect(result.status).toBe(200);
     done();
   });

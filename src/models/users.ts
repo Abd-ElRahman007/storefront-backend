@@ -7,8 +7,8 @@ const pepper = process.env.BCRYPT_PASSWORD;
 
 export type user = {
   username: string;
-  password: string;
-  email: string;
+  password?: string;
+  email?: string;
 };
 export class UsersStore {
   async index(): Promise<user> {
