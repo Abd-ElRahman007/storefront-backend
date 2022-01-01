@@ -25,7 +25,7 @@ describe('users store model', (): void => {
 describe('users store handlers', (): void => {
   it('should create method create a user', async (done): Promise<void> => {
     const user = {
-      username: 'test',
+      firstname: 'test',
       password: 'test',
       lastname: 'test'
     };
@@ -33,9 +33,36 @@ describe('users store handlers', (): void => {
     expect(result.status).toBe(200);
     done();
   });
+  it('should authenticate method authenticate a user', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test'
+    };
+    const result = await request.get('/users/auth').send(user);
+    expect(result.status).toBe(200);
+    done();
+  });
+  it('should update method update a user', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      firstnameNew: 'new'
+    };
+    const result = await request.put('/users/update').send(user);
+    expect(result.status).toBe(200);
+    done();
+  });
+  it('should show method show a user', async (done): Promise<void> => {
+    const user = {
+      firstname: 'new'
+    };
+    const result = await request.get('/users/show').send(user);
+    expect(result.status).toBe(200);
+    done();
+  });
   it('should delete method delete a user', async (done): Promise<void> => {
     const user = {
-      username: 'test',
+      firstname: 'new',
       password: 'test',
       lastname: 'test'
     };
