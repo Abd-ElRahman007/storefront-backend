@@ -6,19 +6,11 @@ const store: UsersStore = new UsersStore();
 
 const index = async (req: Request, res: Response): Promise<void> => {
   const users = await store.index();
-  const user = users.map((user: user): user => {
-    var token = jwt.sign({ user: user }, process.env.JWT_SECRET as string);
-    return {
-      ...user,
-      token: token
-    };
-  });
   res.json(users);
 };
 
 const show = async (req: Request, res: Response): Promise<void> => {
   const user = await store.show((req.body.firstname as unknown) as string);
-  var token = jwt.sign({ user: user }, process.env.JWT_SECRET as string);
   res.json(user);
 };
 const create = async (req: Request, res: Response): Promise<void> => {
@@ -53,11 +45,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
 const authenticate = async (req: Request, res: Response): Promise<void> => {
   const user = {
     firstname: (req.body.firstname as unknown) as string,
-    password: (req.body.password as unknown) as string
+    password: (req.body.password as unknown) as string,
   };
   try {
     const newUser = await store.authenticate(user.firstname, user.password);
-    var token = jwt.sign({ user: newUser }, process.env.JWT_SECRET as string);
     res.json(`Authenticated`);
   } catch (error) {
     res.status(401);
@@ -76,13 +67,23 @@ const delete_ = async (req: Request, res: Response): Promise<void> => {
     res.json(`${error}`);
   }
 }
+const verifyAuth = async (req: Request, res: Response,next:Function): Promise<void> => {
+  try {
+    const token = req.body.token as string;
+    const result = jwt.verify(token, process.env.JWT_SECRET as string);
+    next();
+  } catch (error) {
+    res.status(401);
+    res.json(`${error}`);
+  }
+};
 const users_routes = (app: express.Application): void => {
-  app.get('/users', index);
-  app.get('/users/show', show);
+  app.get('/users',verifyAuth, index);
+  app.get('/users/show',verifyAuth, show);
   app.post('/users/create', create)
-  app.put('/users/update', update);
-  app.get('/users/auth', authenticate);
-  app.delete('/users/delete', delete_);
+  app.put('/users/update',verifyAuth, update);
+  app.get('/users/auth',verifyAuth, authenticate);
+  app.delete('/users/delete',verifyAuth, delete_);
 }
 
 export default users_routes;
