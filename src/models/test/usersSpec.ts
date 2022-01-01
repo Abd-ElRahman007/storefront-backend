@@ -27,7 +27,7 @@ describe('users store handlers', (): void => {
     const user = {
       username: 'test',
       password: 'test',
-      email: 'test'
+      lastname: 'test'
     };
     const result = await request.post('/users/create').send(user);
     expect(result.status).toBe(200);
@@ -37,7 +37,7 @@ describe('users store handlers', (): void => {
     const user = {
       username: 'test',
       password: 'test',
-      email: 'test'
+      lastname: 'test'
     };
     const result = await request.delete('/users/delete').send(user);
     expect(result.status).toBe(200);

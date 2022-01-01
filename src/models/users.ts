@@ -6,10 +6,10 @@ const saltRounds = process.env.SALT_ROUNDS;
 const pepper = process.env.BCRYPT_PASSWORD;
 
 export type user = {
-  userNew?: string;
-  username: string;
+  firstnameNew?: string;
+  firstname: string;
   password?: string;
-  email?: string;
+  lastname?: string;
 };
 export class UsersStore {
   async index(): Promise<user[]> {
@@ -20,13 +20,13 @@ export class UsersStore {
     conn.release();
     return users;
   }
-  async show(username: string): Promise<user | null> {
-    if (!username) {
-      throw new Error('username is required');
+  async show(firstname: string): Promise<user | null> {
+    if (!firstname) {
+      throw new Error('firstname is required');
     }
-    const sql = 'SELECT * FROM users WHERE username = $1';
+    const sql = 'SELECT * FROM users WHERE firstname = $1';
     const conn: PoolClient = await client.connect();
-    const result = await conn.query(sql, [username]);
+    const result = await conn.query(sql, [firstname]);
     if (result.rows.length) {
       const user = result.rows[0];
       conn.release();
@@ -37,83 +37,83 @@ export class UsersStore {
     }
   }
   async create(u: user): Promise<user> {
-    if (!u.username || !u.password || !u.email) {
-      throw new Error('username, password, and email are required');
+    if (!u.firstname || !u.password || !u.lastname) {
+      throw new Error('firstname, password, and lastname are required');
     }
-    if (await this.show(u.username)) {
-      throw new Error('username already exists');
+    if (await this.show(u.firstname)) {
+      throw new Error('firstname already exists');
     } else {
       try {
         const user = {
-          username: u.username,
-          email: u.email,
+          firstname: u.firstname,
+          lastname: u.lastname,
           password: bcrypt.hashSync(u.password + pepper, parseInt((saltRounds as unknown) as string))
         };
-        const sql = 'INSERT INTO users (username,email,password) VALUES ($1,$2,$3) RETURNING *';
+        const sql = 'INSERT INTO users (firstname,lastname,password) VALUES ($1,$2,$3) RETURNING *';
         const conn: PoolClient = await client.connect();
-        const result = await conn.query(sql, [user.username, user.email, user.password]);
+        const result = await conn.query(sql, [user.firstname, user.lastname, user.password]);
         conn.release();
         return result.rows[0];
       } catch (error) {
-        throw new Error(`cannot add new user ${u.username}. error: ${error}`);
+        throw new Error(`cannot add new user ${u.firstname}. error: ${error}`);
       }
     }
   }
   async update(u: user): Promise<user> {
-    if (!u.username || !u.password) {
-      throw new Error('username and password are required');
+    if (!u.firstname || !u.password) {
+      throw new Error('firstname and password are required');
     }
-    if (!await this.authenticate(u.username, u.password)) {
+    if (!await this.authenticate(u.firstname, u.password)) {
       throw new Error('entered password is incorrect');
     }
-    if (!await this.show(u.username)) {
-      throw new Error('username does not exist');
+    if (!await this.show(u.firstname)) {
+      throw new Error('firstname does not exist');
     } else {
       try {
         const user = {
-          username: u.username,
-          usernameNew: u.userNew
+          firstname: u.firstname,
+          usernameNew: u.firstnameNew
         };
-        const sql = 'UPDATE users SET username = $1 WHERE username = $2 RETURNING *';
+        const sql = 'UPDATE users SET firstname = $1 WHERE firstname = $2 RETURNING *';
         const conn: PoolClient = await client.connect();
-        const result = await conn.query(sql, [user.usernameNew, user.username]);
+        const result = await conn.query(sql, [user.usernameNew, user.firstname]);
         conn.release();
         return result.rows[0];
       } catch (error) {
-        throw new Error(`cannot update user ${u.username}. error: ${error}`);
+        throw new Error(`cannot update user ${u.firstname}. error: ${error}`);
       }
     }
   }
-  async delete(username: string): Promise<user | null> {
-    if (!username) {
-      throw new Error('username is required');
+  async delete(firstname: string): Promise<user | null> {
+    if (!firstname) {
+      throw new Error('firstname is required');
     }
-    if (!await this.show(username)) {
-      throw new Error('username does not exist');
+    if (!await this.show(firstname)) {
+      throw new Error('firstname does not exist');
     } else {
       try {
-        const sql = 'DELETE FROM users WHERE username = $1 RETURNING *';
+        const sql = 'DELETE FROM users WHERE firstname = $1 RETURNING *';
         const conn: PoolClient = await client.connect();
-        const result = await conn.query(sql, [username]);
+        const result = await conn.query(sql, [firstname]);
         conn.release();
         return result.rows[0];
       } catch (error) {
-        throw new Error(`cannot delete user ${username}. error: ${error}`);
+        throw new Error(`cannot delete user ${firstname}. error: ${error}`);
       }
     }
   }
-  async authenticate(username: string, password: string): Promise<user | null> {
-    if (!username || !password) {
-      throw new Error('username and password are required');
+  async authenticate(firstname: string, password: string): Promise<user | null> {
+    if (!firstname || !password) {
+      throw new Error('firstname and password are required');
     }
-    const user = await this.show(username);
+    const user = await this.show(firstname);
     if (!user) {
-      throw new Error('username does not exist');
+      throw new Error('firstname does not exist');
     } else {
       try {
-        const sql = 'SELECT password FROM users WHERE username = $1';
+        const sql = 'SELECT password FROM users WHERE firstname = $1';
         const conn: PoolClient = await client.connect();
-        const result = await conn.query(sql, [username]);
+        const result = await conn.query(sql, [firstname]);
         conn.release();
         const user = result.rows[0];
         if (result.rows.length) {
@@ -124,7 +124,7 @@ export class UsersStore {
           }
         }
       } catch (error) {
-        throw new Error(`cannot authenticate user ${username}. ${error}`);
+        throw new Error(`cannot authenticate user ${firstname}. ${error}`);
       }
       return null;
     }
