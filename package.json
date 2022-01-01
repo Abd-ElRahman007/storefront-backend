@@ -7,6 +7,7 @@
     "start": "ts-node src/server.ts",
     "watch": "npx tsc-watch --esModuleInterop src/server.ts --outDir ./dist ",
     "migrate-up": "npx db-migrate up",
+    "migrate-down": "npx db-migrate down",
     "test": "ENV=test db-migrate --env test up && npx jasmine-ts && db-migrate --env test down -c 4",
     "build": "npx tsc",
     "lint": "npx eslint --ext .ts **/*.ts --fix"
