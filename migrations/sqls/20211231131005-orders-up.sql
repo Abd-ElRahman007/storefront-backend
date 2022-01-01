@@ -1,6 +1,8 @@
 CREATE TABLE
   orders(
     id serial PRIMARY KEY,
-    status VARCHAR(10) NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES users(id)
+    id_product INTEGER REFERENCES enchanted_products(id),
+    quantity INTEGER NOT NULL,
+    id_user INTEGER REFERENCES users(id),
+    status VARCHAR(10)
   );
