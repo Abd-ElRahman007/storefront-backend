@@ -10,6 +10,7 @@ export type user = {
   firstname: string;
   password?: string;
   lastname?: string;
+  token?: string;
 };
 export class UsersStore {
   async index(): Promise<user[]> {
@@ -84,13 +85,16 @@ export class UsersStore {
       }
     }
   }
-  async delete(firstname: string): Promise<user | null> {
-    if (!firstname) {
-      throw new Error('firstname is required');
+  async delete(firstname: string,password:string): Promise<user | null> {
+    if (!firstname||!password) {
+      throw new Error('firstname and password is required');
     }
     if (!await this.show(firstname)) {
       throw new Error('firstname does not exist');
-    } else {
+    }
+    if (!await this.authenticate(firstname, password)) {
+      throw new Error('entered password is incorrect');
+    }
       try {
         const sql = 'DELETE FROM users WHERE firstname = $1 RETURNING *';
         const conn: PoolClient = await client.connect();
@@ -100,7 +104,7 @@ export class UsersStore {
       } catch (error) {
         throw new Error(`cannot delete user ${firstname}. error: ${error}`);
       }
-    }
+
   }
   async authenticate(firstname: string, password: string): Promise<user | null> {
     if (!firstname || !password) {

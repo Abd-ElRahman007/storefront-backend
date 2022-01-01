@@ -6,11 +6,19 @@ const store: UsersStore = new UsersStore();
 
 const index = async (req: Request, res: Response): Promise<void> => {
   const users = await store.index();
+  const user = users.map((user: user): user => {
+    var token = jwt.sign({ user: user }, process.env.JWT_SECRET as string);
+    return {
+      ...user,
+      token: token
+    };
+  });
   res.json(users);
 };
 
 const show = async (req: Request, res: Response): Promise<void> => {
   const user = await store.show((req.body.firstname as unknown) as string);
+  var token = jwt.sign({ user: user }, process.env.JWT_SECRET as string);
   res.json(user);
 };
 const create = async (req: Request, res: Response): Promise<void> => {
@@ -32,14 +40,14 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const user = {
     firstname: req.body.firstname as string,
     password: req.body.password as string,
-    userNew: req.body.firstnameNew as string
+    firstnameNew: req.body.firstnameNew as string
   };
   try {
     const newUser = await store.update(user);
     res.json(newUser);
   } catch (error) {
     res.status(400);
-    res.json(error as string);
+    res.json(`${error}`);
   }
 }
 const authenticate = async (req: Request, res: Response): Promise<void> => {
@@ -58,8 +66,9 @@ const authenticate = async (req: Request, res: Response): Promise<void> => {
 };
 const delete_ = async (req: Request, res: Response): Promise<void> => {
   const firstname = req.body.firstname as string;
+  const password = req.body.password as string;
   try {
-    const user = await store.delete(firstname);
+    const user = await store.delete(firstname, password);
     res.status(200);
     res.json('deleted');
   } catch (error) {
