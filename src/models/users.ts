@@ -41,6 +41,7 @@ export class UsersStore {
     if (!u.firstname || !u.password || !u.lastname) {
       throw new Error('firstname, password, and lastname are required');
     }
+    
     if (await this.show(u.firstname)) {
       throw new Error('firstname already exists');
     } else {

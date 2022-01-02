@@ -19,7 +19,7 @@ export class ProductsStore {
       throw new Error(`cannot get products ${error}`);
     }
   }
-  async show(name: string): Promise<product> {
+  async show(name: string): Promise<product | null> {
     if (!name) {
       throw new Error(`cannot find product with empty name`);
     }
@@ -27,8 +27,13 @@ export class ProductsStore {
       const sql = 'SELECT * FROM enchanted_stuff WHERE name = $1;';
       const conn: PoolClient = await client.connect();
       const result = await conn.query(sql, [name]);
-      conn.release();
-      return result.rows[0];
+      if (result.rows.length) {
+        conn.release();
+        return result.rows[0];
+      } else {
+        conn.release();
+        return null;
+      }
     } catch (error) {
       throw new Error(`cannot find product name ${name}, error:${error}`);
     }

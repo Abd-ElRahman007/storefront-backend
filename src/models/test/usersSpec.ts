@@ -36,7 +36,8 @@ describe('users store handlers', (): void => {
   it('should authenticate method authenticate a user', async (done): Promise<void> => {
     const user = {
       firstname: 'test',
-      password: 'test'
+      password: 'test',
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
     };
     const result = await request.get('/users/auth').send(user);
     expect(result.status).toBe(200);
@@ -46,7 +47,8 @@ describe('users store handlers', (): void => {
     const user = {
       firstname: 'test',
       password: 'test',
-      firstnameNew: 'new'
+      firstnameNew: 'new',
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
     };
     const result = await request.put('/users/update').send(user);
     expect(result.status).toBe(200);
@@ -54,7 +56,8 @@ describe('users store handlers', (): void => {
   });
   it('should show method show a user', async (done): Promise<void> => {
     const user = {
-      firstname: 'new'
+      firstname: 'new',
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
     };
     const result = await request.get('/users/show').send(user);
     expect(result.status).toBe(200);
@@ -64,7 +67,8 @@ describe('users store handlers', (): void => {
     const user = {
       firstname: 'new',
       password: 'test',
-      lastname: 'test'
+      lastname: 'test',
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
     };
     const result = await request.delete('/users/delete').send(user);
     expect(result.status).toBe(200);

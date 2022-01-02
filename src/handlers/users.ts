@@ -25,7 +25,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     res.json(token);
   } catch (error) {
     res.status(400);
-    res.json(error as string);
+    res.json(`${error}`);
   }
 }
 const update = async (req: Request, res: Response): Promise<void> => {
