@@ -21,10 +21,12 @@ const create = async (req: Request, res: Response): Promise<void> => {
   };
   if (product.token) {
     var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
-    console.log(`verified`);
   } else {
     res.status(401);
     throw new Error('No token');
+  } if (await store.show(product.name)) {
+    res.status(409);
+    throw new Error('Product already exists');
   }
   try {
     const newProduct = await store.create(product);

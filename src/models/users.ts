@@ -41,7 +41,7 @@ export class UsersStore {
     if (!u.firstname || !u.password || !u.lastname) {
       throw new Error('firstname, password, and lastname are required');
     }
-    
+
     if (await this.show(u.firstname)) {
       throw new Error('firstname already exists');
     } else {
@@ -59,6 +59,22 @@ export class UsersStore {
       } catch (error) {
         throw new Error(`cannot add new user ${u.firstname}. error: ${error}`);
       }
+    }
+  }
+  async showId(id: number): Promise<user | null> {
+    if (!id) {
+      throw new Error('id is required');
+    }
+    const sql = 'SELECT * FROM users WHERE id = $1';
+    const conn: PoolClient = await client.connect();
+    const result = await conn.query(sql, [id]);
+    if (result.rows.length) {
+      const user = result.rows[0];
+      conn.release();
+      return user;
+    } else {
+      conn.release();
+      return null;
     }
   }
   async update(u: user): Promise<user> {
@@ -86,8 +102,8 @@ export class UsersStore {
       }
     }
   }
-  async delete(firstname: string,password:string): Promise<user | null> {
-    if (!firstname||!password) {
+  async delete(firstname: string, password: string): Promise<user | null> {
+    if (!firstname || !password) {
       throw new Error('firstname and password is required');
     }
     if (!await this.show(firstname)) {
@@ -96,15 +112,15 @@ export class UsersStore {
     if (!await this.authenticate(firstname, password)) {
       throw new Error('entered password is incorrect');
     }
-      try {
-        const sql = 'DELETE FROM users WHERE firstname = $1 RETURNING *';
-        const conn: PoolClient = await client.connect();
-        const result = await conn.query(sql, [firstname]);
-        conn.release();
-        return result.rows[0];
-      } catch (error) {
-        throw new Error(`cannot delete user ${firstname}. error: ${error}`);
-      }
+    try {
+      const sql = 'DELETE FROM users WHERE firstname = $1 RETURNING *';
+      const conn: PoolClient = await client.connect();
+      const result = await conn.query(sql, [firstname]);
+      conn.release();
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`cannot delete user ${firstname}. error: ${error}`);
+    }
 
   }
   async authenticate(firstname: string, password: string): Promise<user | null> {

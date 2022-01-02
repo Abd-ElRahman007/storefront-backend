@@ -74,4 +74,23 @@ export class ProductsStore {
       throw new Error(`cannot delete product name ${name}, error:${error}`);
     }
   }
+  async showId(id: number): Promise<product | null> {
+    if (!id) {
+      throw new Error(`cannot find product with empty id`);
+    }
+    try {
+      const sql = 'SELECT * FROM enchanted_stuff WHERE id = $1;';
+      const conn: PoolClient = await client.connect();
+      const result = await conn.query(sql, [id]);
+      if (result.rows.length) {
+        conn.release();
+        return result.rows[0];
+      } else {
+        conn.release();
+        return null;
+      }
+    } catch (error) {
+      throw new Error(`cannot find product id ${id}, error:${error}`);
+    }
+  }
 }

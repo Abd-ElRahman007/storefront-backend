@@ -35,7 +35,7 @@ export class OrdersStore {
   }
   async create(o: order): Promise<order> {
     if (!o.id_product || !o.quantity || !o.id_user || !o.status) {
-      throw new Error('id_product, quantity, id_user, and status are required');
+      throw new Error('id_product, quantity and status are required');
     }
     if (await this.show(o.id_product)) {
       throw new Error('id_product already exists');
