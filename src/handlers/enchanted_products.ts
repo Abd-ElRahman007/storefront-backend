@@ -34,9 +34,33 @@ const create = async (req: Request, res: Response): Promise<void> => {
     res.json(`${error}`);
   }
 }
+const delete_= async (req: Request, res: Response): Promise<void> => {
+  const product = {
+    name: req.body.name as string,
+    price: req.body.price as number,
+    token: req.body.token as string
+  };
+  if (product.token) {
+    var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
+    console.log(`verified`);
+  } else {
+    res.status(401);
+    throw new Error('No token');
+  }
+  try {
+    const item = await store.delete(product.name);
+    res.status(200);
+    res.json(`Deleted`);
+  } catch (error) {
+    res.status(400);
+    res.json(`${error}`);
+  }
+}
+
 const products_routes = (app: express.Application) => {
   app.get('/products', index);
   app.post('/products/create', create);
   app.get('/products/show', show);
+  app.delete('/products/delete', delete_);
 };
 export default products_routes;

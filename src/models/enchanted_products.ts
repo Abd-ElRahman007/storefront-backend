@@ -56,4 +56,22 @@ export class ProductsStore {
       throw new Error(`cannot add new product title ${product.name}. error: ${error}`);
     }
   }
+  async delete(name: string): Promise<product> {
+    if (!name) {
+      throw new Error(`cannot delete product with empty name`);
+    }
+    if (!await this.show(name)) {
+      throw new Error(`cannot delete product with name ${name}, it does not exist`);
+    }
+    try {
+      const sql = 'DELETE FROM enchanted_stuff WHERE name = $1 RETURNING *;';
+      const conn: PoolClient = await client.connect();
+      const result = await conn.query(sql, [name]);
+      const books = result.rows[0];
+      conn.release();
+      return books;
+    } catch (error) {
+      throw new Error(`cannot delete product name ${name}, error:${error}`);
+    }
+  }
 }
