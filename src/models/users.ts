@@ -6,6 +6,7 @@ const saltRounds = process.env.SALT_ROUNDS;
 const pepper = process.env.BCRYPT_PASSWORD;
 
 export type user = {
+  id?: number;
   firstnameNew?: string;
   firstname: string;
   password?: string;
@@ -61,6 +62,28 @@ export class UsersStore {
       }
     }
   }
+async createId(u: user): Promise<user> {
+    if (!u.firstname || !u.password || !u.lastname) {
+      throw new Error('firstname, password, and lastname are required');
+    }
+      try {
+        const user = {
+          id:u.id,
+          firstname: u.firstname,
+          lastname: u.lastname,
+          password: bcrypt.hashSync(u.password + pepper, parseInt((saltRounds as unknown) as string))
+        };
+        const sql = 'INSERT INTO users (id,firstname,lastname,password) VALUES ($1,$2,$3,$4) RETURNING *';
+        const conn: PoolClient = await client.connect();
+        const result = await conn.query(sql, [user.id,user.firstname, user.lastname, user.password]);
+        conn.release();
+        return result.rows[0];
+      } catch (error) {
+        throw new Error(`cannot add new user ${u.firstname}. error: ${error}`);
+      }
+
+  }
+
   async showId(id: number): Promise<user | null> {
     if (!id) {
       throw new Error('id is required');

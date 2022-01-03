@@ -4,8 +4,9 @@ import { PoolClient } from 'pg';
 export type order = {
   id_product: number;
   quantity: number;
-  id_user: number;
+  id_user?: number;
   status: string;
+  token?: string;
 }
 
 export class OrdersStore {

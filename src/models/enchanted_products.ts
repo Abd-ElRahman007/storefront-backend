@@ -2,6 +2,7 @@ import { PoolClient } from "pg";
 import client from "../database";
 
 export type product = {
+  id?: number;
   name: string;
   price: number;
   token?: string;
@@ -36,6 +37,21 @@ export class ProductsStore {
       }
     } catch (error) {
       throw new Error(`cannot find product name ${name}, error:${error}`);
+    }
+  }
+  async createId(product: product): Promise<product> {
+    if (!product.name || !product.price) {
+      throw new Error(`cannot create product with empty name or price`);
+    }
+    try {
+      const sql = 'INSERT INTO enchanted_stuff (id,name,price) VALUES ($1,$2,$3) RETURNING *;';
+      const conn: PoolClient = await client.connect();
+      const result = await conn.query(sql, [product.id, product.name, product.price]);
+      const prodId = result.rows[0];
+      conn.release();
+      return prodId;
+    } catch (error) {
+      throw new Error(`cannot create product name ${product.name}, error:${error}`);
     }
   }
   async create(product: product): Promise<product> {
