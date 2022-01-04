@@ -52,9 +52,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const delete_ = async (req: Request, res: Response): Promise<void> => {
     const order = {
       id_product: req.body.id_product as number,
-      quantity: req.body.quantity as number,
-      id_user: (req.params.id as unknown) as number,
-      status: req.body.status as string,
       token: req.body.token as string
     };
     if (order.token) {

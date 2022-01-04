@@ -39,12 +39,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
 const delete_= async (req: Request, res: Response): Promise<void> => {
   const product = {
     name: req.body.name as string,
-    price: req.body.price as number,
     token: req.body.token as string
   };
   if (product.token) {
     var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
-    console.log(`verified`);
   } else {
     res.status(401);
     throw new Error('No token');
