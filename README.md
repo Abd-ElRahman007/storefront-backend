@@ -23,7 +23,21 @@ setup it like these and all the parts in the project that used it will work
 
 ## setup the project
 
-- first you fill the mentioned `.env` file with the used user and database
-- second npm i to install all the dependencies
-- third run the server by using `npm run start`
-- fourth you an postman or any alter to use the endpoints
+- **first** setup the database by creating the main database in psql create a user `CREATE USER store_user WITH PASSWORD 'postgres' CREATEDB;` that will create the user with password second in terminal run `psql -U store_user` and enter the password `postgres` now when you get in create the databases the first one is the main `CREATE DATABASE store_backend;` and then create the test database `CREATE DATABASE store_backend_test;` this will create the databases and the user to it
+- **second** you fill the mentioned `.env` file with the used user and database and user password and database test like
+
+```text
+POSTGRES_HOST = 127.0.0.1
+POSTGRES_DB = store_backend
+POSTGRES_DB_TEST = store_backend_test
+POSTGRES_USER = store_user
+POSTGRES_PASSWORD = postgres
+ENV=dev
+BCRYPT_PASSWORD=bcryptpassword
+SALT_ROUNDS=10
+JWT_SECRET=jwtsecret
+```
+
+- **third** npm i to install all the dependencies
+- **fourth** run the server by using `npm run start`
+- **fifth** you can use postman or any alter to use the endpoints
