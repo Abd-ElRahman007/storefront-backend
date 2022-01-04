@@ -1,7 +1,7 @@
 # API Requirements
 
-first of careful when you create the user becouse the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description and needs
-also there are two types of test one i disabled becouse it tests with a token you will have to supply to work so you can supply to each (usersSpec, enchanted_stuffSpec and ordersSpec) you will see a comment that till you were to put the token to make a complete request to the api that actually tests all the endpoints and the other test are that will return there condition is to return false because there is no token supplied so they will succeed
+first of careful when you create the user because the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description and needs
+also there are two types of test one i disabled because it tests with a token you will have to supply to work so you can supply to each (usersSpec, enchanted_stuffSpec and ordersSpec) you will see a comment that till you were to put the token to make a complete request to the api that actually tests all the endpoints and the other test are that will return there condition is to return false because there is no token supplied so they will succeed
 
 ## API Endpoints
 
