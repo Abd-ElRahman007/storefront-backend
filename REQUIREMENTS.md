@@ -9,7 +9,7 @@ the server is running on <http://localhost:8080> to use any route just put it af
 
 ## whats inside it the schema
 
-i have created three migrations for each table the (orders,users, and enchanted_stuff {product table})
+i have created four migrations for each table the (orders,users, and enchanted_stuff {product table},and products_order )
 
 ### 1. the order table
 
@@ -44,15 +44,25 @@ inside of the enchanted_stuff migration up i have created the table enchanted_st
 
 these are the component of the enchanted_stuff table
 
+### 4. the products_order table
+
+inside of the products_order migration up i gave created a table products_order with the schema
+
+- `id` the id of the product order
+- `product_id` that reference the enchanted_stuff id
+- `order_id` that reference the order id
+
+these are the component of the products_order table
+
 ## Products
 
 when you use that endpoint in create you must supply the required body variable like:
 
 ```json
 {
-  "name":"example",
-  "price":4,
-  "token":"{the token you get from the users create}"
+  "name": "example",
+  "price": 4,
+  "token": "{the token you get from the users create}"
 }
 ```
 
@@ -60,7 +70,7 @@ the show endpoint will be like:
 
 ```json
 {
-  "name":"example"
+  "name": "example"
 }
 ```
 
@@ -68,8 +78,8 @@ the delete endpoint will be like:
 
 ```json
 {
-  "name":"example",
-  "token":"{token}"
+  "name": "example",
+  "token": "{token}"
 }
 ```
 
@@ -90,9 +100,9 @@ when you use this endpoint in create the body will be like that:
 
 ```json
 {
-  "firstname":"jack",
-  "lastname":"smith",
-  "password":"password"
+  "firstname": "jack",
+  "lastname": "smith",
+  "password": "password"
 }
 ```
 
@@ -100,8 +110,8 @@ the show will be like this:
 
 ```json
 {
-  "firstname":"jack",
-  "token":"{token}"
+  "firstname": "jack",
+  "token": "{token}"
 }
 ```
 
@@ -109,10 +119,10 @@ the update method will be like this:
 
 ```json
 {
-  "firstname":"jack",
-  "password":"password",
-  "firstnameNew":"sparrow",
-  "token":"{token}"
+  "firstname": "jack",
+  "password": "password",
+  "firstnameNew": "sparrow",
+  "token": "{token}"
 }
 ```
 
@@ -120,9 +130,9 @@ the auth method look like this:
 
 ```json
 {
-  "firstname":"jack",
-  "password":"password",
-  "token":"{token}"
+  "firstname": "jack",
+  "password": "password",
+  "token": "{token}"
 }
 ```
 
@@ -130,9 +140,9 @@ the delete method will be like this:
 
 ```json
 {
-  "firstname":"jack",
-  "password":"password",
-  "token":"{token}"
+  "firstname": "jack",
+  "password": "password",
+  "token": "{token}"
 }
 ```
 
@@ -175,7 +185,14 @@ there are 4 routes for orders which are:
 - `/order` it is a [GET] request route that gives you the all the orders for that exists {token not required}
 - `/order/show` it is a [GET] request route that shows you a specific order you give it the id_product in the body to see the orders {token not required}
 - `/order/create/:id` it is a [POST] request route that creates an order for that user you supply it with (id_product,quantity,status, and token) the user id you supply with the parameter (:id) that is in the route token is required
-- `/order/delete   it is a [DELETE] request route that deletes an order you give it the id_product in the body along with the token
+- `/order/delete it is a [DELETE] request route that deletes an order you give it the id_product in the body along with the token
+
+### the products_order route
+
+there are two routes for products_order which are:
+
+- `/products-in-orders` it is a [GET] request route that joins the products and orders table to show how many orders with that product
+- `/users-with-orders` it is a [GET] request route that joins the users and order table to show how many orders does the user order
 
 ## Data Shapes
 
@@ -201,3 +218,9 @@ the data types are the following
 - quantity is an integer not null
 - id_user is an integer reference users(id)
 - status is a varchar(10)
+
+### products_orders type
+
+- id is a SERIAL PRIMARY KEY
+- product_id is a BIGINT NOT NULL REFERENCES enchanted_stuff(id)
+- order_id is a BIGINT NOT NULL REFERENCES orders(id)
