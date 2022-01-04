@@ -5,8 +5,13 @@ import jwt from 'jsonwebtoken';
 const store: UsersStore = new UsersStore();
 
 const index = async (req: Request, res: Response): Promise<void> => {
-  const users = await store.index();
-  res.json(users);
+  try {
+    const users = await store.index();
+    res.json(users);
+  } catch (error) {
+    res.status(400);
+    res.json(`${error}`);
+  }
 };
 
 const show = async (req: Request, res: Response): Promise<void> => {
@@ -74,7 +79,8 @@ const delete_ = async (req: Request, res: Response): Promise<void> => {
 }
 const verifyAuth = async (req: Request, res: Response,next:Function): Promise<void> => {
   try {
-    const token = req.body.token as string;
+    const auth = req.headers.authorization as string;
+    const token = auth.split(' ')[1];
     const result = jwt.verify(token, process.env.JWT_SECRET as string);
     next();
   } catch (error) {
@@ -84,10 +90,10 @@ const verifyAuth = async (req: Request, res: Response,next:Function): Promise<vo
 };
 const users_routes = (app: express.Application): void => {
   app.get('/users',verifyAuth, index);
-  app.get('/users/show',verifyAuth, show);
+  app.post('/users/show',verifyAuth, show);
   app.post('/users/create', create)
   app.put('/users/update',verifyAuth, update);
-  app.get('/users/auth',verifyAuth, authenticate);
+  app.post('/users/auth',verifyAuth, authenticate);
   app.delete('/users/delete',verifyAuth, delete_);
 }
 

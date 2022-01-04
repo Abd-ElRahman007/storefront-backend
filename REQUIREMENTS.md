@@ -151,10 +151,10 @@ the delete method will be like this:
 there are 6 routes for user which are:
 
 - `/users` it is a [GET] request route that gets you all users in the users database it needs a token in the body
-- `/users/show` it is a [GET] request route that gets you the user with that specific firstname that you can supply in the body and it needs a token
+- `/users/show` it is a [POST] request route that gets you the user with that specific firstname that you can supply in the body and it needs a token
 - `/users/create` it is a [POST] request route that creates a user with that firstname,lastname, and password that you can supply it in the body
 - `/users/update` it is a [PUT] request route that alter an user to change its firstname you will supply it with the firstname and password and the {firstnameNew} and a token to change it
-- `/users/auth` it is a [GET] request route that authenticate a user give it in the body the firstname and the password of that user and a token
+- `/users/auth` it is a [POST] request route that authenticate a user give it in the body the firstname and the password of that user and a token
 - `/users/delete` it is a [DELETE] request route that deletes a user it requires the firstname and password and a token that you supply to it in the body
 
 ### Orders
