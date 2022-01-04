@@ -21,7 +21,7 @@ xdescribe('enchanted_products store handlers', (): void => {
     const product = {
       name: 'test',
       price: 5,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbHVZWFFoNnFIOUg3STNZeHFiNi9lLkhldnY5N3JHSlA5Y0ZYYXJMZ2owc0loMzdKdkUwbnEifSwiaWF0IjoxNjQxMDg5MzIzfQ.sh8TGBNBkAAs37rOFqSwe6Ccd1Y4X94Eve3xWFl896I"
+      token: ""//supply a token here
     };
     const result = await request.post('/products/create').send(product);
     expect(result.status).toBe(200);
@@ -38,11 +38,39 @@ xdescribe('enchanted_products store handlers', (): void => {
   it('should delete method delete a product', async (done): Promise<void> => {
     const product = {
       name: 'test',
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbHVZWFFoNnFIOUg3STNZeHFiNi9lLkhldnY5N3JHSlA5Y0ZYYXJMZ2owc0loMzdKdkUwbnEifSwiaWF0IjoxNjQxMDg5MzIzfQ.sh8TGBNBkAAs37rOFqSwe6Ccd1Y4X94Eve3xWFl896I"
+      token: ""//supply a token here
     };
     const result = await request.delete('/products/delete').send(product);
     expect(result.status).toBe(200);
     done();
   });
+})
+
+describe('enchanted_products store handlers without token', (): void => {
+  it('should create method without token give an error', async (done): Promise<void> => {
+    const product = {
+      name: 'test',
+      price: 5
+    };
+    const result = await request.post('/products/create').send(product);
+    expect(result.status).toBe(401);
+    done();
+  });
+  it('should show method give an error no product is exist', async (done): Promise<void> => {
+    const product = {
+      name: 'test'
+    };
+    const result = await request.get('/products/show').send(product);
+    expect(result.body).toBeFalsy();
+    done();
+  })
+  it('should delete method give an error no product is exist', async (done): Promise<void> => {
+    const product = {
+      name: 'test'
+    };
+    const result = await request.delete('/products/delete').send(product);
+    expect(result.status).toBe(401);
+    done();
+  })
 })
 

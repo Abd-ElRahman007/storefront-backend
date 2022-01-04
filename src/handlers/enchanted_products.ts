@@ -10,49 +10,64 @@ const index = async (_req: Request, res: Response): Promise<void> => {
 };
 
 const show = async (req: Request, res: Response): Promise<void> => {
-  const product = await store.show((req.body.name as unknown) as string);
-  res.json(product);
+  try {
+    const product = await store.show((req.body.name as unknown) as string);
+    res.json(product);
+  } catch (error) {
+    res.status(401);
+    res.json(`${error}`);
+  }
 };
 const create = async (req: Request, res: Response): Promise<void> => {
-  const product = {
+  try {
+    const product = {
     name: req.body.name as string,
     price: req.body.price as number,
-    token: req.body.token as string
-  };
-  if (product.token) {
-    var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
-  } else {
-    res.status(401);
-    throw new Error('No token');
-  } if (await store.show(product.name)) {
-    res.status(409);
-    throw new Error('Product already exists');
-  }
-  try {
-    const newProduct = await store.create(product);
-    res.json(newProduct);
+      token: req.body.token as string
+    };
+    if (product.token) {
+      var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
+    } else {
+      res.status(401);
+      throw new Error('No token');
+    } if (await store.show(product.name)) {
+      res.status(409);
+      throw new Error('Product already exists');
+    }
+    try {
+      const newProduct = await store.create(product);
+      res.json(newProduct);
+    } catch (error) {
+      res.status(400);
+      res.json(`${error}`);
+    }
   } catch (error) {
-    res.status(400);
+    res.status(401);
     res.json(`${error}`);
   }
 }
-const delete_= async (req: Request, res: Response): Promise<void> => {
-  const product = {
-    name: req.body.name as string,
-    token: req.body.token as string
-  };
-  if (product.token) {
-    var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
-  } else {
-    res.status(401);
-    throw new Error('No token');
-  }
+const delete_ = async (req: Request, res: Response): Promise<void> => {
   try {
-    const item = await store.delete(product.name);
-    res.status(200);
-    res.json(`Deleted`);
+    const product = {
+      name: req.body.name as string,
+      token: req.body.token as string
+    };
+    if (product.token) {
+      var decoded = jwt.verify(product.token, process.env.JWT_SECRET as string);
+    } else {
+      res.status(401);
+      throw new Error('No token');
+    }
+    try {
+      const item = await store.delete(product.name);
+      res.status(200);
+      res.json(`Deleted`);
+    } catch (error) {
+      res.status(400);
+      res.json(`${error}`);
+    }
   } catch (error) {
-    res.status(400);
+    res.status(401);
     res.json(`${error}`);
   }
 }

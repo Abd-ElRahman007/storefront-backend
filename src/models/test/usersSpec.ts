@@ -37,7 +37,7 @@ xdescribe('users store handlers', (): void => {
     const user = {
       firstname: 'test',
       password: 'test',
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
+      token: '' //supply token here
     };
     const result = await request.get('/users/auth').send(user);
     expect(result.status).toBe(200);
@@ -48,7 +48,7 @@ xdescribe('users store handlers', (): void => {
       firstname: 'test',
       password: 'test',
       firstnameNew: 'new',
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
+      token: ''//supply a token here
     };
     const result = await request.put('/users/update').send(user);
     expect(result.status).toBe(200);
@@ -57,7 +57,7 @@ xdescribe('users store handlers', (): void => {
   it('should show method show a user', async (done): Promise<void> => {
     const user = {
       firstname: 'new',
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
+      token: ''//supply a token here
     };
     const result = await request.get('/users/show').send(user);
     expect(result.status).toBe(200);
@@ -68,10 +68,49 @@ xdescribe('users store handlers', (): void => {
       firstname: 'new',
       password: 'test',
       lastname: 'test',
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbnFoTlViWnh4SVN2Vmw0SzNBdWp6LjJEa3RlSHppYUV5SHBuLkVadnlpd0pHYWhpVUR2b2UifSwiaWF0IjoxNjQxMDg4NTM4fQ.3L0X1zZkFtVfRKnRs5qdGEj77h3AfPynXWa7AAU0dUw'
+      token: ''//supply a token here
     };
     const result = await request.delete('/users/delete').send(user);
     expect(result.status).toBe(200);
     done();
   });
 })
+describe('users store handlers without token', (): void => {
+  it('should show method give an error no token', async (done): Promise<void> => {
+    const user = {
+      firstname: 'new',
+    };
+    const result = await request.get('/users/show').send(user);
+    expect(result.status).toBe(401);
+    done();
+  });
+  it('should update method give an error no token', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      firstnameNew: 'new'
+    };
+    const result = await request.put('/users/update').send(user);
+    expect(result.status).toBe(401);
+    done();
+  });
+  it('should delete method give an error no token', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test'
+    };
+    const result = await request.delete('/users/delete').send(user);
+    expect(result.status).toBe(401);
+    done();
+  });
+  it('should auth method give an error no token', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test'
+    };
+    const result = await request.get('/users/auth').send(user);
+    expect(result.status).toBe(401);
+    done();
+  })
+});

@@ -43,7 +43,7 @@ xdescribe('orders store handlers', (): void => {
       id_product: 55,
       quantity: 1,
       status: 'active',
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbHVZWFFoNnFIOUg3STNZeHFiNi9lLkhldnY5N3JHSlA5Y0ZYYXJMZ2owc0loMzdKdkUwbnEifSwiaWF0IjoxNjQxMDg5MzIzfQ.sh8TGBNBkAAs37rOFqSwe6Ccd1Y4X94Eve3xWFl896I'
+      token: ''//supply a token here
     };
     const response = await request.post('/orders/create/99').send(order);
     expect(response.status).toBe(200);
@@ -58,7 +58,7 @@ xdescribe('orders store handlers', (): void => {
   it('should delete method delete an order', async (done) => {
     const order = {
       id_product: 55,
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJmaXJzdG5hbWUiOiJ0ZXN0IiwibGFzdG5hbWUiOiJ0ZXN0IiwicGFzc3dvcmQiOiIkMmIkMTAkbHVZWFFoNnFIOUg3STNZeHFiNi9lLkhldnY5N3JHSlA5Y0ZYYXJMZ2owc0loMzdKdkUwbnEifSwiaWF0IjoxNjQxMDg5MzIzfQ.sh8TGBNBkAAs37rOFqSwe6Ccd1Y4X94Eve3xWFl896I'
+      token: ''//supply a token here
     }
     const response = await request.delete('/orders/delete').send(order);
     expect(response.status).toBe(200);
@@ -68,6 +68,32 @@ xdescribe('orders store handlers', (): void => {
     conn2.query(sql4);
     conn2.query(sql3);
     conn2.release();
+    done();
+  });
+});
+describe('order store handlers without token', (): void => {
+  it('should create method without a token give an error', async (done) => {
+    const order = {
+      id_product: 55,
+      quantity: 1,
+      status: 'active',
+    }
+    const response = await request.post('/orders/create/99').send(order);
+    expect(response.status).toBe(401);
+    done();
+  });
+  it('should show method return null no order is made', async (done) => {
+    const id_product = 1;
+    const response = await request.get('/orders/show').send({ id_product });
+    expect(response.body).toBeFalsy();
+    done();
+  });
+  it('should delete method return error no order is made', async (done) => {
+    const order = {
+      id_product: 55,
+    }
+    const response = await request.delete('/orders/delete').send(order);
+    expect(response.status).toBe(401);
     done();
   });
 });

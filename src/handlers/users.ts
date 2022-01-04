@@ -10,8 +10,13 @@ const index = async (req: Request, res: Response): Promise<void> => {
 };
 
 const show = async (req: Request, res: Response): Promise<void> => {
-  const user = await store.show((req.body.firstname as unknown) as string);
-  res.json(user);
+  try {
+    const user = await store.show((req.body.firstname as unknown) as string);
+    res.json(user);
+  } catch (error) {
+    res.status(401);
+    res.json(`${error}`);
+  }
 };
 const create = async (req: Request, res: Response): Promise<void> => {
   const user = {
@@ -24,7 +29,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     var token = jwt.sign({ user: newUser }, process.env.JWT_SECRET as string);
     res.json(`${token} ${newUser}`);
   } catch (error) {
-    res.status(400);
+    res.status(401);
     res.json(`${error}`);
   }
 }
@@ -38,7 +43,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     const newUser = await store.update(user);
     res.json(newUser);
   } catch (error) {
-    res.status(400);
+    res.status(401);
     res.json(`${error}`);
   }
 }
