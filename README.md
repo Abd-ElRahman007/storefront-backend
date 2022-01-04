@@ -21,6 +21,17 @@ this file must contain the following: all uppercase like i showed
 these are the variables in the `.env` file ,make the key `uppercase`
 setup it like these and all the parts in the project that used it will work
 
+## the package.json scripts
+
+- **first** the `start` script that starts a server
+- **second** the `watch` script that watch for any changes in the typescript and compiles it
+- **third** the `migrate-up` script that run the migrate up in the main database
+- **fourth** the `migrate-down` script that run the migrate down in the main database
+- **fifth** the `test` script that run the test jasmine
+- **sixth** the `lint` script that run the linter along with prettier
+
+if you want to use them just run `npm run {script name}` and thats it
+
 ## setup the project
 
 - **first** setup the database by creating the main database in psql create a user `CREATE USER store_user WITH PASSWORD 'postgres' CREATEDB;` that will create the user with password second in terminal run `psql -U store_user` and enter the password `postgres` now when you get in create the databases the first one is the main `CREATE DATABASE store_backend;` and then create the test database `CREATE DATABASE store_backend_test;` this will create the databases and the user to it
