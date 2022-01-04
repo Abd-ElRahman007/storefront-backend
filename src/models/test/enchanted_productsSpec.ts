@@ -16,7 +16,7 @@ describe('enchanted_products store model', (): void => {
     expect(store.create).toBeDefined();
   });
 })
-describe('enchanted_products store handlers', (): void => {
+xdescribe('enchanted_products store handlers', (): void => {
   it('should create method create a product', async (done): Promise<void> => {
     const product = {
       name: 'test',

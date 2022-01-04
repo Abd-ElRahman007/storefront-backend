@@ -24,7 +24,7 @@ describe('orders store model', (): void => {
     expect(store.delete).toBeDefined();
   });
 })
-describe('orders store handlers', (): void => {
+xdescribe('orders store handlers', (): void => {
   it('should create method create an order', async (done) => {
     const orderuser = {
       id: 99,
