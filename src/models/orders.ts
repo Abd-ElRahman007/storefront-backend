@@ -3,7 +3,6 @@ import { PoolClient } from 'pg';
 
 export type order = {
   id_user: number;
-  quantity: number;
   status: string;
 }
 
