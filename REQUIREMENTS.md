@@ -1,7 +1,7 @@
 # API Requirements
 
 first of careful when you create the user because the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description and needs
-also there are two types of test one i disabled because it tests with a token you will have to supply to work so you can supply to each (usersSpec, enchanted_stuffSpec and ordersSpec) you will see a comment that till you were to put the token to make a complete request to the api that actually tests all the endpoints and the other test are that will return there condition is to return false because there is no token supplied so they will succeed
+also there are two types of test one i disabled because it tests with a token you will have to supply to work so you can supply to each (usersSpec, enchanted_stuffSpec and ordersSpec) you will see a comment that till you were to put the token to make a complete request to the api that actually tests all the endpoints and the other test that will return false because there is no token supplied so they will succeed
 
 ## API Endpoints
 
@@ -16,8 +16,6 @@ i have created four migrations for each table the (orders,users, and enchanted_s
 inside of the order migration up i have created the table orders with the schema
 
 - `id` the id of the order
-- `id_product` the id of the product that it is being ordered that is referenced the id of the (enchanted_stuff)table
-- `quantity` the quantity of the product that it is being ordered
 - `id_user` the user that ordered that is referenced the id of the (users) table
 - `status` the status of the order if it active, pending, or delivered
 
@@ -51,6 +49,7 @@ inside of the products_order migration up i gave created a table products_order 
 - `id` the id of the product order
 - `product_id` that reference the enchanted_stuff id
 - `order_id` that reference the order id
+- `quantity` the quantity of the product that it is being ordered
 
 these are the component of the products_order table
 
@@ -61,8 +60,7 @@ when you use that endpoint in create you must supply the required body variable 
 ```json
 {
   "name": "example",
-  "price": 4,
-  "token": "{the token you get from the users create}"
+  "price": 4
 }
 ```
 
@@ -78,8 +76,7 @@ the delete endpoint will be like:
 
 ```json
 {
-  "name": "example",
-  "token": "{token}"
+  "name": "example"
 }
 ```
 
@@ -89,8 +86,8 @@ there are 4 routes for enchanted_stuff which are:
 
 - `/products` it is a [GET] request route that gives you all products out there {token not required}
 - `/products/show` it is a [GET] request route that shows you that specific product just supply in the body the name of the product {token not required}
-- `/products/create` it is a [POST] request route that creates a product it needs a name,price and token to create the product that you put in the body of the request it needs a token
-- `/products/delete` it is a [DELETE] request route that deletes a product it needs the token and the name of the product the token is required
+- `/products/create` it is a [POST] request route that creates a product it needs a name,price and token to create the product that you put in the body of the request it needs a token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/products/delete` it is a [DELETE] request route that deletes a product it needs the token and the name of the product the token is required and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 
 the token is the same as the users token you get in the create users route
 
@@ -110,8 +107,7 @@ the show will be like this:
 
 ```json
 {
-  "firstname": "jack",
-  "token": "{token}"
+  "firstname": "jack"
 }
 ```
 
@@ -121,8 +117,7 @@ the update method will be like this:
 {
   "firstname": "jack",
   "password": "password",
-  "firstnameNew": "sparrow",
-  "token": "{token}"
+  "firstnameNew": "sparrow"
 }
 ```
 
@@ -131,8 +126,7 @@ the auth method look like this:
 ```json
 {
   "firstname": "jack",
-  "password": "password",
-  "token": "{token}"
+  "password": "password"
 }
 ```
 
@@ -141,8 +135,7 @@ the delete method will be like this:
 ```json
 {
   "firstname": "jack",
-  "password": "password",
-  "token": "{token}"
+  "password": "password"
 }
 ```
 
@@ -150,23 +143,20 @@ the delete method will be like this:
 
 there are 6 routes for user which are:
 
-- `/users` it is a [GET] request route that gets you all users in the users database it needs a token in the body
-- `/users/show` it is a [POST] request route that gets you the user with that specific firstname that you can supply in the body and it needs a token
+- `/users` it is a [GET] request route that gets you all users in the users database and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/users/show` it is a [POST] request route that gets you the user with that specific firstname that you can supply in the body and it needs a token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 - `/users/create` it is a [POST] request route that creates a user with that firstname,lastname, and password that you can supply it in the body
-- `/users/update` it is a [PUT] request route that alter an user to change its firstname you will supply it with the firstname and password and the {firstnameNew} and a token to change it
-- `/users/auth` it is a [POST] request route that authenticate a user give it in the body the firstname and the password of that user and a token
-- `/users/delete` it is a [DELETE] request route that deletes a user it requires the firstname and password and a token that you supply to it in the body
+- `/users/update` it is a [PUT] request route that alter an user to change its firstname you will supply it with the firstname and password and the {firstnameNew} and a token to change it and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/users/auth` it is a [POST] request route that authenticate a user give it in the body the firstname and the password of that user and a token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/users/delete` it is a [DELETE] request route that deletes a user it requires the firstname and password and a token that you supply to it in the body and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 
 ### Orders
 
-the order endpoint create will be like this with just a slightly different you must make sure that the (user_id and the product_id) it exist the (id_user) is supplied in the parameter
+the order endpoint create will be like this with just a slightly different you must make sure that the (user_id) is exist and the (id_user) is supplied in the parameter
 
 ```json
 {
-  "id_product":{the id of that product} number,
-  "quantity":3,
-  "status":"active",
-  "token":"{token}"
+  "status":"active"
 }
 ```
 
@@ -174,7 +164,7 @@ the show method will be like this:
 
 ```json
 {
-  "id_product":{the id of that product} number
+  "id_user":{the id of that user} number
 }
 ```
 
@@ -183,9 +173,9 @@ the show method will be like this:
 there are 4 routes for orders which are:
 
 - `/order` it is a [GET] request route that gives you the all the orders for that exists {token not required}
-- `/order/show` it is a [GET] request route that shows you a specific order you give it the id_product in the body to see the orders {token not required}
-- `/order/create/:id` it is a [POST] request route that creates an order for that user you supply it with (id_product,quantity,status, and token) the user id you supply with the parameter (:id) that is in the route token is required
-- `/order/delete it is a [DELETE] request route that deletes an order you give it the id_product in the body along with the token
+- `/order/show` it is a [POST] request route that shows you a specific order you give it the id_product in the body to see the orders {token not required} and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/order/create/:id` it is a [POST] request route that creates an order for that user you supply it with (id_product,quantity,status, and token) the user id you supply with the parameter (:id) that is in the route token is required and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/order/delete` it is a [DELETE] request route that deletes an order you give it the id_product in the body along with the token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 
 ### the products_order route
 
@@ -214,8 +204,6 @@ the data types are the following
 ### Orders type
 
 - id is a serial primary key
-- id_product is an integer references enchanted_stuff(id)
-- quantity is an integer not null
 - id_user is an integer reference users(id)
 - status is a varchar(10)
 
@@ -224,3 +212,4 @@ the data types are the following
 - id is a SERIAL PRIMARY KEY
 - product_id is a BIGINT NOT NULL REFERENCES enchanted_stuff(id)
 - order_id is a BIGINT NOT NULL REFERENCES orders(id)
+- quantity INTERGER NOT NULL

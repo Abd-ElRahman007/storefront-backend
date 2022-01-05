@@ -7,13 +7,19 @@ import jwt from 'jsonwebtoken';
 const store: OrdersStore = new OrdersStore();
 const users_store: UsersStore = new UsersStore();
 const products_store: ProductsStore = new ProductsStore();
+
 const index = async (req: Request, res: Response): Promise<void> => {
-  const orders = await store.index();
-  res.json(orders);
+  try {
+    const orders = await store.index();
+    res.json(orders);
+  } catch (error) {
+    res.status(400);
+    res.json(`${error}`);
+  }
 };
 const show = async (req: Request, res: Response): Promise<void> => {
   try {
-    const order = await store.show((req.body.id_product as unknown) as number);
+    const order = await store.show((req.body.id_user as unknown) as number);
     res.json(order);
   } catch (error) {
     res.status(200);
@@ -23,27 +29,19 @@ const show = async (req: Request, res: Response): Promise<void> => {
 const create = async (req: Request, res: Response): Promise<void> => {
   try {
     const order = {
-      id_product: req.body.id_product as number,
       quantity: req.body.quantity as number,
       id_user: (req.params.id as unknown) as number,
-      status: req.body.status as string,
-      token: req.body.token as string
+      status: req.body.status as string
     };
-    if (order.token) {
-      var decoded = jwt.verify(order.token, process.env.JWT_SECRET as string);
-    } else {
-      res.status(401);
-      throw new Error('No token');
-    }
     if (!await users_store.showId(order.id_user)) {
       res.status(401);
       throw new Error('User not found');
     }
-    if (!await products_store.showId(order.id_product)) {
+    if (!await products_store.showId(order.id_user)) {
       res.status(401);
       throw new Error('Product not found');
     }
-    if (await store.show(order.id_product)) {
+    if (await store.show(order.id_user)) {
       res.status(409);
       throw new Error('Order already exists');
     }
@@ -59,36 +57,40 @@ const create = async (req: Request, res: Response): Promise<void> => {
     res.json(`${error}`);
   }
 };
-  const delete_ = async (req: Request, res: Response): Promise<void> => {
+const delete_ = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const order = {
+      id_user: req.body.id_user as number
+    };
     try {
-      const order = {
-        id_product: req.body.id_product as number,
-        token: req.body.token as string
-      };
-      if (order.token) {
-        var decoded = jwt.verify(order.token, process.env.JWT_SECRET as string);
-        console.log(`verified`);
-      } else {
-        res.status(401);
-        throw new Error('No token');
-      }
-      try {
-        const item = await store.delete(order.id_product);
-        res.status(200);
-        res.json(`Deleted`);
-      } catch (error) {
-        res.status(400);
-        res.json(`${error}`);
-      }
+      const item = await store.delete(order.id_user);
+      res.status(200);
+      res.json(`Deleted`);
     } catch (error) {
-      res.status(401);
+      res.status(400);
       res.json(`${error}`);
     }
-  };
+  } catch (error) {
+    res.status(401);
+    res.json(`${error}`);
+  }
+};
+const verifyToken = (req: Request, res: Response, next: any): void => {
+  try {
+    const auth = req.headers.authorization as string;
+    const token = auth.split(' ')[1];
+    const result = jwt.verify(token, process.env.JWT_SECRET as string);
+    next();
+  } catch (error) {
+    res.status(401);
+    res.json(`${error}`);
+  }
+}
+
 const orders_routes = (app: express.Application): void => {
   app.get('/orders', index);
-  app.post('/orders/create/:id', create);
-  app.get('/orders/show', show);
+  app.post('/orders/create/:id',verifyToken, create);
+  app.post('/orders/show',verifyToken, show);
   app.delete('/orders/delete', delete_);
 }
 export default orders_routes;

@@ -11,7 +11,6 @@ export type user = {
   firstname: string;
   password?: string;
   lastname?: string;
-  token?: string;
 };
 export class UsersStore {
   async index(): Promise<user[]> {
