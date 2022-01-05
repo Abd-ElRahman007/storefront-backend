@@ -50,5 +50,5 @@ JWT_SECRET=jwtsecret
 ```
 
 - **third** npm i to install all the dependencies
-- **fourth** run the server by using `npm run start` the postgers port is 5432 and the local host port is 8080
+- **fourth** run the server by using `npm run start` the postgers port is `5432` and the local host port is `8080`
 - **fifth** you can use postman or any alter to use the endpoints
