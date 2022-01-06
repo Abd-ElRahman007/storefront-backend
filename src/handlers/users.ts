@@ -91,7 +91,7 @@ const verifyAuth = async (req: Request, res: Response,next:Function): Promise<vo
 const users_routes = (app: express.Application): void => {
   app.get('/users',verifyAuth, index);
   app.post('/users/show',verifyAuth, show);
-  app.post('/users/create', create)
+  app.post('/users/create', create);
   app.put('/users/update',verifyAuth, update);
   app.post('/users/auth',verifyAuth, authenticate);
   app.delete('/users/delete',verifyAuth, delete_);
