@@ -174,7 +174,7 @@ there are 4 routes for orders which are:
 
 - `/order` it is a [GET] request route that gives you the all the orders for that exists {token not required}
 - `/order/show` it is a [POST] request route that shows you a specific order you give it the id_product in the body to see the orders {token not required} and token is in the header by a syntax `Authorization: Bearer {token}` in the header
-- `/order/create/:id` it is a [POST] request route that creates an order for that user you supply it with (id_product,quantity,status, and token) the user id you supply with the parameter (:id) that is in the route token is required and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/order/create/:id` it is a [POST] request route that creates an order for that user you supply it with (status and token) the user id you supply with the parameter (:id) that is in the route token is required and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 - `/order/delete` it is a [DELETE] request route that deletes an order you give it the id_product in the body along with the token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 
 ### the products_order route
@@ -183,6 +183,10 @@ there are two routes for products_order which are:
 
 - `/products-in-orders` it is a [GET] request route that joins the products and orders table to show how many orders with that product
 - `/users-with-orders` it is a [GET] request route that joins the users and order table to show how many orders does the user order
+- `/create-order` it is a [POST] request route that creates an order with (product_id,order_id,quantity) that you supply in the body and a token that you supply in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/show-order` it is a [POST] request route that shows you the order for that exact order id you supply the route with the id and a token in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/index-order` it is a [GET] request route that shows all the orders {token not required}
+- `/delete-order` it is a [DELETE] request route that deletes an order in the Products_order it needs the id of the order in the body and a token that you supply by a syntax `Authorization: Bearer {token}` in the header
 
 ## Data Shapes
 
