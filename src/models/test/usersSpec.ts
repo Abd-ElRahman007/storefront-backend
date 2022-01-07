@@ -22,7 +22,7 @@ describe('users store model', (): void => {
     expect(store.delete).toBeDefined();
   });
 })
-xdescribe('users store handlers', (): void => {
+describe('users store handlers', (): void => {
   it('should create method create a user', async (done): Promise<void> => {
     const user = {
       firstname: 'test',
@@ -36,9 +36,11 @@ xdescribe('users store handlers', (): void => {
   it('should authenticate method authenticate a user', async (done): Promise<void> => {
     const user = {
       firstname: 'test',
-      password: 'test'
+      password: 'test',
+      lastname: 'test'
     };
-    const result = await request.post('/users/auth').send(user);
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.post('/users/auth').set('Authorization', `Bearer ${key.text}`).send(user);
     expect(result.status).toBe(200);
     done();
   });
@@ -46,17 +48,22 @@ xdescribe('users store handlers', (): void => {
     const user = {
       firstname: 'test',
       password: 'test',
-      firstnameNew: 'new'
+      firstnameNew: 'new',
+      lastname: 'test'
     };
-    const result = await request.put('/users/update').send(user);
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.put('/users/update').set('Authorization', `Bearer ${key.text}`).send(user);
     expect(result.status).toBe(200);
     done();
   });
   it('should show method show a user', async (done): Promise<void> => {
     const user = {
-      firstname: 'new'
+      firstname: 'new',
+      password: 'test',
+      lastname: 'test'
     };
-    const result = await request.post('/users/show').send(user);
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.post('/users/show').set('Authorization', `Bearer ${key.text}`).send(user);
     expect(result.status).toBe(200);
     done();
   });
@@ -66,47 +73,9 @@ xdescribe('users store handlers', (): void => {
       password: 'test',
       lastname: 'test'
     };
-    const result = await request.delete('/users/delete').send(user);
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.delete('/users/delete').set('Authorization', `Bearer ${key.text}`).send(user);
     expect(result.status).toBe(200);
     done();
   });
 })
-describe('users store handlers without token', (): void => {
-  it('should show method give an error no token', async (done): Promise<void> => {
-    const user = {
-      firstname: 'new',
-    };
-    const result = await request.post('/users/show').send(user);
-    expect(result.status).toBe(401);
-    done();
-  });
-  it('should update method give an error no token', async (done): Promise<void> => {
-    const user = {
-      firstname: 'test',
-      password: 'test',
-      firstnameNew: 'new'
-    };
-    const result = await request.put('/users/update').send(user);
-    expect(result.status).toBe(401);
-    done();
-  });
-  it('should delete method give an error no token', async (done): Promise<void> => {
-    const user = {
-      firstname: 'test',
-      password: 'test',
-      lastname: 'test'
-    };
-    const result = await request.delete('/users/delete').send(user);
-    expect(result.status).toBe(401);
-    done();
-  });
-  it('should auth method give an error no token', async (done): Promise<void> => {
-    const user = {
-      firstname: 'test',
-      password: 'test'
-    };
-    const result = await request.post('/users/auth').send(user);
-    expect(result.status).toBe(401);
-    done();
-  })
-});
