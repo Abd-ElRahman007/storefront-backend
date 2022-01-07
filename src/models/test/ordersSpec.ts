@@ -25,12 +25,12 @@ describe('orders store model', (): void => {
   });
 })
 xdescribe('orders store handlers', (): void => {
-  beforeAll(async() => {
+  beforeAll(async () => {
     const orderuser = {
-    id: 99,
-    firstname: 'test2',
-    password: 'test2',
-    lastname: 'test2',
+      id: 99,
+      firstname: 'test2',
+      password: 'test2',
+      lastname: 'test2',
     }
     const user_ = await users_store.createId(orderuser);
     const orderProduct = {
@@ -47,7 +47,7 @@ xdescribe('orders store handlers', (): void => {
     conn2.query(sql4);
     conn2.query(sql3);
     conn2.release();
-   })
+  })
   it('should create method create an order', async (done) => {
     const order: order = {
       status: 'active'

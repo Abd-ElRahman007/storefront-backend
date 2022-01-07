@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import {productOrders, DashboardQueries } from "./dashboard";
+import { productOrders, DashboardQueries } from "./dashboard";
 
 const dashboard = new DashboardQueries();
 

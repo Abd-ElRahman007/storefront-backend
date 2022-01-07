@@ -27,7 +27,7 @@ export class DashboardQueries {
       throw new Error(`cannot add new productOrder ${o.product_id}. error: ${error}`);
     }
   }
-  async showOrder(id: productOrders): Promise<productOrders |null> {
+  async showOrder(id: productOrders): Promise<productOrders | null> {
     if (!id) {
       throw new Error('id is required');
     }
