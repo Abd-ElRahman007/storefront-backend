@@ -19,7 +19,7 @@ const index = async (req: Request, res: Response): Promise<void> => {
 };
 const show = async (req: Request, res: Response): Promise<void> => {
   try {
-    const order = await store.show((req.body.id_user as unknown) as number);
+    const order = await store.show((req.params.id_user as unknown) as number);
     res.json(order);
   } catch (error) {
     res.status(200);
@@ -60,7 +60,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
 const delete_ = async (req: Request, res: Response): Promise<void> => {
   try {
     const order = {
-      id_user: req.body.id_user as number
+      id_user: (req.params.id_user as unknown) as number
     };
     try {
       const item = await store.delete(order.id_user);
@@ -90,7 +90,7 @@ const verifyToken = (req: Request, res: Response, next: any): void => {
 const orders_routes = (app: express.Application): void => {
   app.get('/orders', index);
   app.post('/orders/create/:id',verifyToken, create);
-  app.post('/orders/show',verifyToken, show);
-  app.delete('/orders/delete', delete_);
+  app.post('/orders/show/:id_user',verifyToken, show);
+  app.delete('/orders/delete/:id_user', delete_);
 }
 export default orders_routes;

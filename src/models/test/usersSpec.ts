@@ -36,10 +36,9 @@ xdescribe('users store handlers', (): void => {
   it('should authenticate method authenticate a user', async (done): Promise<void> => {
     const user = {
       firstname: 'test',
-      password: 'test',
-      token: '' //supply token here
+      password: 'test'
     };
-    const result = await request.get('/users/auth').send(user);
+    const result = await request.post('/users/auth').send(user);
     expect(result.status).toBe(200);
     done();
   });
@@ -47,8 +46,7 @@ xdescribe('users store handlers', (): void => {
     const user = {
       firstname: 'test',
       password: 'test',
-      firstnameNew: 'new',
-      token: ''//supply a token here
+      firstnameNew: 'new'
     };
     const result = await request.put('/users/update').send(user);
     expect(result.status).toBe(200);
@@ -56,10 +54,9 @@ xdescribe('users store handlers', (): void => {
   });
   it('should show method show a user', async (done): Promise<void> => {
     const user = {
-      firstname: 'new',
-      token: ''//supply a token here
+      firstname: 'new'
     };
-    const result = await request.get('/users/show').send(user);
+    const result = await request.post('/users/show').send(user);
     expect(result.status).toBe(200);
     done();
   });
@@ -67,8 +64,7 @@ xdescribe('users store handlers', (): void => {
     const user = {
       firstname: 'new',
       password: 'test',
-      lastname: 'test',
-      token: ''//supply a token here
+      lastname: 'test'
     };
     const result = await request.delete('/users/delete').send(user);
     expect(result.status).toBe(200);
@@ -80,7 +76,7 @@ describe('users store handlers without token', (): void => {
     const user = {
       firstname: 'new',
     };
-    const result = await request.get('/users/show').send(user);
+    const result = await request.post('/users/show').send(user);
     expect(result.status).toBe(401);
     done();
   });
@@ -109,7 +105,7 @@ describe('users store handlers without token', (): void => {
       firstname: 'test',
       password: 'test'
     };
-    const result = await request.get('/users/auth').send(user);
+    const result = await request.post('/users/auth').send(user);
     expect(result.status).toBe(401);
     done();
   })

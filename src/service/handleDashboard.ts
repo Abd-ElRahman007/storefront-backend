@@ -23,14 +23,19 @@ const usersWithOrders = async (req: Request, res: Response): Promise<void> => {
   }
 }
 const createOrder = async (req: Request, res: Response): Promise<void> => {
-  if (await dashboard.showOrders(req.body.order_id)) {
-    res.status(409);
-    throw new Error('Order already exists');
-  }
   try {
-    const { quantity, order_id, product_id } = req.body;
-    const order = await dashboard.create({ quantity, order_id, product_id });
-    res.json(order);
+    if (await dashboard.showOrders(req.body.order_id)) {
+      res.status(409);
+      throw new Error('Order already exists');
+    }
+    try {
+      const { quantity, order_id, product_id } = req.body;
+      const order = await dashboard.create({ quantity, order_id, product_id });
+      res.json(order);
+    } catch (error) {
+      res.status(404)
+      res.json(`${error}`);
+    }
   } catch (error) {
     res.status(404)
     res.json(`${error}`);

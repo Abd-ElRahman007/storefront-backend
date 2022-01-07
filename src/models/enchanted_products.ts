@@ -55,7 +55,7 @@ export class ProductsStore {
   }
   async create(product: product): Promise<product> {
     if (!product.name || !product.price) {
-      throw new Error(`cannot add new product and price with empty fields`);
+      throw new Error(`cannot add new product with empty name and price`);
     }
     if (await this.show(product.name)) {
       throw new Error(`cannot add new product with name ${product.name}, it already exists`);

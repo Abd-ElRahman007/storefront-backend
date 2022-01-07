@@ -2,7 +2,7 @@ import client from '../database'
 import { PoolClient } from 'pg';
 
 export type order = {
-  id_user: number;
+  id_user?: number;
   status: string;
 }
 

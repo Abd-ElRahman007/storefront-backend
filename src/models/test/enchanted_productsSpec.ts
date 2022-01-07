@@ -60,7 +60,7 @@ describe('enchanted_products store handlers without token', (): void => {
     const product = {
       name: 'test'
     };
-    const result = await request.get('/products/show').send(product);
+    const result = await request.post('/products/show').send(product);
     expect(result.body).toBeFalsy();
     done();
   })

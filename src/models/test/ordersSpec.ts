@@ -40,10 +40,7 @@ xdescribe('orders store handlers', (): void => {
     }
     const prod_ = await products_store.createId(orderProduct);
     const order: order = {
-      id_product: 55,
-      quantity: 1,
-      status: 'active',
-      token: ''//supply a token here
+      status: 'active'
     };
     const response = await request.post('/orders/create/99').send(order);
     expect(response.status).toBe(200);
@@ -51,16 +48,12 @@ xdescribe('orders store handlers', (): void => {
   });
   it('should show method show an order', async (done) => {
     const id_product = 1;
-    const response = await request.get('/orders/show').send({ id_product });
+    const response = await request.post('/orders/show').send({ id_product });
     expect(response.status).toBe(200);
     done();
   });
   it('should delete method delete an order', async (done) => {
-    const order = {
-      id_product: 55,
-      token: ''//supply a token here
-    }
-    const response = await request.delete('/orders/delete').send(order);
+    const response = await request.delete('/orders/delete/99');
     expect(response.status).toBe(200);
     const sql4 = 'DELETE FROM enchanted_stuff WHERE id = 55;';
     const sql3 = 'DELETE FROM users WHERE id = 99;';
@@ -74,8 +67,6 @@ xdescribe('orders store handlers', (): void => {
 describe('order store handlers without token', (): void => {
   it('should create method without a token give an error', async (done) => {
     const order = {
-      id_product: 55,
-      quantity: 1,
       status: 'active',
     }
     const response = await request.post('/orders/create/99').send(order);
@@ -83,17 +74,13 @@ describe('order store handlers without token', (): void => {
     done();
   });
   it('should show method return null no order is made', async (done) => {
-    const id_product = 1;
-    const response = await request.get('/orders/show').send({ id_product });
-    expect(response.body).toBeFalsy();
+    const response = await request.post('/orders/show/99');
+    expect(response.status).toBe(401);
     done();
   });
   it('should delete method return error no order is made', async (done) => {
-    const order = {
-      id_product: 55,
-    }
-    const response = await request.delete('/orders/delete').send(order);
-    expect(response.status).toBe(401);
+    const response = await request.delete('/orders/delete/99');
+    expect(response.status).toBe(400);
     done();
   });
 });
