@@ -34,6 +34,17 @@ describe('enchanted_products store handlers', (): void => {
     expect(result.status).toBe(200);
     done();
   });
+  it('should index method index all products', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test',
+    }
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.get('/products').set('Authorization', `Bearer ${key.text}`);
+    expect(result.status).toBe(200);
+    done();
+  });
   it('should show method show a product', async (done): Promise<void> => {
     const product = {
       name: 'test'

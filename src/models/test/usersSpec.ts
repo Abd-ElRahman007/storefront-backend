@@ -33,6 +33,17 @@ describe('users store handlers', (): void => {
     expect(result.status).toBe(200);
     done();
   });
+  it('should index method index all users', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test',
+    }
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.get('/users').set('Authorization',`Bearer ${key.text}`);
+    expect(result.status).toBe(200);
+    done();
+  })
   it('should authenticate method authenticate a user', async (done): Promise<void> => {
     const user = {
       firstname: 'test',

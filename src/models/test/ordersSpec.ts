@@ -25,8 +25,6 @@ describe('orders store model', (): void => {
   });
 })
 describe('orders store handlers', (): void => {
-  beforeAll(async () => {
-  })
   it('should create method create an order', async (done) => {
     const orderuser = {
       id: 99,
@@ -43,6 +41,19 @@ describe('orders store handlers', (): void => {
     expect(response.status).toBe(200);
     done();
   });
+  it('should index method index all orders', async (done) => {
+    const orderuser = {
+      id: 99,
+      firstname: 'test2',
+      password: 'test2',
+      lastname: 'test2',
+    }
+    const key= await request.post('/users/createToken').send(orderuser);
+    const response = await request.get('/orders').set('Authorization',`Bearer ${key.text}`);
+    expect(response.status).toBe(200);
+    done();
+  });
+
   it('should show method show an order', async (done) => {
     const orderuser = {
       id: 99,
