@@ -36,10 +36,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
       res.status(401);
       throw new Error('User not found');
     }
-    if (!await products_store.showId(order.id_user)) {
-      res.status(401);
-      throw new Error('Product not found');
-    }
     if (await store.show(order.id_user)) {
       res.status(401);
       throw new Error('Order already exists');

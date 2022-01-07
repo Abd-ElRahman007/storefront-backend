@@ -1,6 +1,7 @@
 import { product, ProductsStore } from '../enchanted_products';
 import supertest from 'supertest';
 import app from '../../server';
+import { UsersStore } from '../users';
 
 const request = supertest(app);
 const store: ProductsStore = new ProductsStore();
@@ -16,14 +17,20 @@ describe('enchanted_products store model', (): void => {
     expect(store.create).toBeDefined();
   });
 })
-xdescribe('enchanted_products store handlers', (): void => {
+describe('enchanted_products store handlers', (): void => {
   it('should create method create a product', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test'
+    };
+    const resultuser = await request.post('/users/create').send(user);
+    const key = await request.post('/users/createToken').send(user);
     const product = {
       name: 'test',
       price: 5,
-      token: ""//supply a token here
     };
-    const result = await request.post('/products/create').send(product);
+    const result = await request.post('/products/create').set('Authorization', `Bearer ${key.text}`).send(product);
     expect(result.status).toBe(200);
     done();
   });
@@ -31,46 +38,31 @@ xdescribe('enchanted_products store handlers', (): void => {
     const product = {
       name: 'test'
     };
-    const result = await request.get('/products/show').send(product);
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test'
+    };
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.post('/products/show').set('Authorization', `Bearer ${key.text}`).send(product);
     expect(result.status).toBe(200);
     done();
   });
   it('should delete method delete a product', async (done): Promise<void> => {
     const product = {
-      name: 'test',
-      token: ""//supply a token here
+      name: 'test'
     };
-    const result = await request.delete('/products/delete').send(product);
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test'
+    };
+    const key = await request.post('/users/createToken').send(user);
+    const result = await request.delete('/products/delete').set('Authorization', `Bearer ${key.text}`).send(product);
+    const resultuser = await request.delete('/users/delete').set('Authorization', `Bearer ${key.text}`).send(user);
     expect(result.status).toBe(200);
     done();
   });
 })
 
-describe('enchanted_products store handlers without token', (): void => {
-  it('should create method without token give an error', async (done): Promise<void> => {
-    const product = {
-      name: 'test',
-      price: 5
-    };
-    const result = await request.post('/products/create').send(product);
-    expect(result.status).toBe(401);
-    done();
-  });
-  it('should show method give an error no product is exist', async (done): Promise<void> => {
-    const product = {
-      name: 'test'
-    };
-    const result = await request.post('/products/show').send(product);
-    expect(result.body).toBeFalsy();
-    done();
-  })
-  it('should delete method give an error no product is exist', async (done): Promise<void> => {
-    const product = {
-      name: 'test'
-    };
-    const result = await request.delete('/products/delete').send(product);
-    expect(result.status).toBe(401);
-    done();
-  })
-})
 
