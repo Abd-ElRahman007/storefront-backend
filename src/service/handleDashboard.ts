@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { DashboardQueries } from "./dashboard";
+import {productOrders, DashboardQueries } from "./dashboard";
 
 const dashboard = new DashboardQueries();
 
@@ -24,7 +24,7 @@ const usersWithOrders = async (req: Request, res: Response): Promise<void> => {
 }
 const createOrder = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (await dashboard.showOrders(req.body.order_id)) {
+    if (await dashboard.showOrder(req.body.order_id)) {
       res.status(409);
       throw new Error('Order already exists');
     }
@@ -44,7 +44,7 @@ const createOrder = async (req: Request, res: Response): Promise<void> => {
 
 const showOrders = async (req: Request, res: Response): Promise<void> => {
   try {
-    const order = await dashboard.showOrders(req.body.id);
+    const order = await dashboard.showOrder(req.body.id);
     res.json(order);
   } catch (error) {
     res.status(404)
@@ -54,7 +54,7 @@ const showOrders = async (req: Request, res: Response): Promise<void> => {
 
 const indexOrder = async (req: Request, res: Response): Promise<void> => {
   try {
-    const orders = await dashboard.indexOrder();
+    const orders = await dashboard.indexOrders();
     res.json(orders);
   } catch (error) {
     res.status(404)
@@ -89,7 +89,7 @@ const dashboardRoute = (app: express.Application): void => {
   app.get('/products-in-orders', productsInOrder);
   app.get('/users-with-orders', usersWithOrders);
   app.post('/create-order', verifyToken, createOrder);
-  app.post('/show-orders', verifyToken, showOrders);
+  app.post('/show-order', verifyToken, showOrders);
   app.get('/index-orders', indexOrder);
   app.delete('/delete-order', verifyToken, deleteOrder);
 }

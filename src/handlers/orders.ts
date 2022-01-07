@@ -29,7 +29,6 @@ const show = async (req: Request, res: Response): Promise<void> => {
 const create = async (req: Request, res: Response): Promise<void> => {
   try {
     const order = {
-      quantity: req.body.quantity as number,
       id_user: (req.params.id as unknown) as number,
       status: req.body.status as string
     };
@@ -42,7 +41,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
       throw new Error('Product not found');
     }
     if (await store.show(order.id_user)) {
-      res.status(409);
+      res.status(401);
       throw new Error('Order already exists');
     }
     try {

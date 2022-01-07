@@ -1,7 +1,7 @@
 # API Requirements
 
-first of careful when you create the user because the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description and needs
-also there are two types of test one i disabled because it tests with a token you will have to supply to work so you can supply to each (usersSpec, enchanted_stuffSpec and ordersSpec) you will see a comment that till you were to put the token to make a complete request to the api that actually tests all the endpoints and the other test that will return false because there is no token supplied so they will succeed
+first of careful when you create the user because the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description and
+also there are two types of test one i disabled because it tests with a token, api that actually tests all the endpoints and the other tests will return false because there is no token supplied so they will succeed
 
 ## API Endpoints
 
@@ -160,12 +160,11 @@ the order endpoint create will be like this with just a slightly different you m
 }
 ```
 
-the show method will be like this:
+the show method will supply in the params like
+ be like this:
 
-```json
-{
-  "id_user":{the id of that user} number
-}
+```text
+http://localhost:8080/orders/show/{user_id}
 ```
 
 ### the orders route
@@ -173,9 +172,9 @@ the show method will be like this:
 there are 4 routes for orders which are:
 
 - `/order` it is a [GET] request route that gives you the all the orders for that exists {token not required}
-- `/order/show` it is a [POST] request route that shows you a specific order you give it the id_product in the body to see the orders {token not required} and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/order/show/:id-user` it is a [POST] request route that shows you a specific order you give it the id_user in the params to see the orders {token not required}
 - `/order/create/:id` it is a [POST] request route that creates an order for that user you supply it with (status and token) the user id you supply with the parameter (:id) that is in the route token is required and token is in the header by a syntax `Authorization: Bearer {token}` in the header
-- `/order/delete` it is a [DELETE] request route that deletes an order you give it the id_product in the body along with the token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/order/delete:id_user` it is a [DELETE] request route that deletes an order you give it the id_user in the param along with the token and token is in the header by a syntax `Authorization: Bearer {token}` in the header
 
 ### the products_order route
 

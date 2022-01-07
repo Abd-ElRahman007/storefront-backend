@@ -27,7 +27,7 @@ export class DashboardQueries {
       throw new Error(`cannot add new productOrder ${o.product_id}. error: ${error}`);
     }
   }
-  async showOrders(id: productOrders): Promise<productOrders |null> {
+  async showOrder(id: productOrders): Promise<productOrders |null> {
     if (!id) {
       throw new Error('id is required');
     }
@@ -46,7 +46,7 @@ export class DashboardQueries {
       throw new Error(`cannot get product_orders with id: ${error}`);
     }
   }
-  async indexOrder(): Promise<productOrders[]> {
+  async indexOrders(): Promise<productOrders[]> {
     try {
       const sql = `select * from products_order`;
       const conn: PoolClient = await client.connect();
