@@ -25,12 +25,12 @@ describe('orders store model', (): void => {
   });
 })
 xdescribe('orders store handlers', (): void => {
-  it('should create method create an order', async (done) => {
+  beforeAll(async() => {
     const orderuser = {
-      id: 99,
-      firstname: 'test2',
-      password: 'test2',
-      lastname: 'test2',
+    id: 99,
+    firstname: 'test2',
+    password: 'test2',
+    lastname: 'test2',
     }
     const user_ = await users_store.createId(orderuser);
     const orderProduct = {
@@ -39,6 +39,16 @@ xdescribe('orders store handlers', (): void => {
       price: 1,
     }
     const prod_ = await products_store.createId(orderProduct);
+  })
+  afterAll(async () => {
+    const sql4 = 'DELETE FROM enchanted_stuff WHERE id = 55;';
+    const sql3 = 'DELETE FROM users WHERE id = 99;';
+    const conn2 = await client.connect();
+    conn2.query(sql4);
+    conn2.query(sql3);
+    conn2.release();
+   })
+  it('should create method create an order', async (done) => {
     const order: order = {
       status: 'active'
     };
@@ -55,12 +65,6 @@ xdescribe('orders store handlers', (): void => {
   it('should delete method delete an order', async (done) => {
     const response = await request.delete('/orders/delete/99');
     expect(response.status).toBe(200);
-    const sql4 = 'DELETE FROM enchanted_stuff WHERE id = 55;';
-    const sql3 = 'DELETE FROM users WHERE id = 99;';
-    const conn2 = await client.connect();
-    conn2.query(sql4);
-    conn2.query(sql3);
-    conn2.release();
     done();
   });
 });
