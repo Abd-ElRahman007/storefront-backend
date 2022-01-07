@@ -1,7 +1,6 @@
 # API Requirements
 
-first of careful when you create the user because the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description and
-also there are two types of test one i disabled because it tests with a token, api that actually tests all the endpoints and the other tests will return false because there is no token supplied so they will succeed
+first of careful when you create the user because the returning jwt you will copy and paste it in the required endpoint like i mentioned in the endpoint description, you then supply it in the header and i write the syntax corresponding to each endpoint that needs it
 
 ## API Endpoints
 
@@ -182,10 +181,10 @@ there are two routes for products_order which are:
 
 - `/products-in-orders` it is a [GET] request route that joins the products and orders table to show how many orders with that product
 - `/users-with-orders` it is a [GET] request route that joins the users and order table to show how many orders does the user order
-- `/create-order` it is a [POST] request route that creates an order with (product_id,order_id,quantity) that you supply in the body and a token that you supply in the header by a syntax `Authorization: Bearer {token}` in the header
+- `/create-order` it is a [POST] request route that creates an order with (product_id,order_id,quantity) that you supply in the body and a token that is exist in the header by a syntax `Authorization: Bearer {token}` in the header
 - `/show-order` it is a [POST] request route that shows you the order for that exact order id you supply the route with the id and a token in the header by a syntax `Authorization: Bearer {token}` in the header
 - `/index-order` it is a [GET] request route that shows all the orders {token not required}
-- `/delete-order` it is a [DELETE] request route that deletes an order in the Products_order it needs the id of the order in the body and a token that you supply by a syntax `Authorization: Bearer {token}` in the header
+- `/delete-order` it is a [DELETE] request route that deletes an order in the Products_order it needs the id of the order in the body and a token that is there by a syntax `Authorization: Bearer {token}` in the header
 
 ## Data Shapes
 

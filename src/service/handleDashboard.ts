@@ -29,8 +29,12 @@ const createOrder = async (req: Request, res: Response): Promise<void> => {
       throw new Error('Order already exists');
     }
     try {
-      const { quantity, order_id, product_id } = req.body;
-      const order = await dashboard.create({ quantity, order_id, product_id });
+      const productOrders = {
+        product_id: req.body.product_id,
+        order_id: req.body.order_id,
+        quantity: req.body.quantity
+      }
+      const order = await dashboard.create(productOrders);
       res.json(order);
     } catch (error) {
       res.status(404)
@@ -44,7 +48,7 @@ const createOrder = async (req: Request, res: Response): Promise<void> => {
 
 const showOrders = async (req: Request, res: Response): Promise<void> => {
   try {
-    const order = await dashboard.showOrder(req.body.id);
+    const order = await dashboard.showOrder(req.body.order_id);
     res.json(order);
   } catch (error) {
     res.status(404)
@@ -64,7 +68,7 @@ const indexOrder = async (req: Request, res: Response): Promise<void> => {
 
 const deleteOrder = async (req: Request, res: Response): Promise<void> => {
   try {
-    const order = await dashboard.deleteOrder(req.body.id);
+    const order = await dashboard.deleteOrder(req.body.order_id);
     res.json(order);
   } catch (error) {
     res.status(404)
@@ -90,7 +94,7 @@ const dashboardRoute = (app: express.Application): void => {
   app.get('/users-with-orders', usersWithOrders);
   app.post('/create-order', verifyToken, createOrder);
   app.post('/show-order', verifyToken, showOrders);
-  app.get('/index-orders', indexOrder);
+  app.get('/index-orders',verifyToken, indexOrder);
   app.delete('/delete-order', verifyToken, deleteOrder);
 }
 export default dashboardRoute;

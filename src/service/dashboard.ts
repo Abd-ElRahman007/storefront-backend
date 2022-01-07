@@ -33,7 +33,7 @@ export class DashboardQueries {
     }
     try {
       const conn = await client.connect();
-      const sql = `select * from products_order where id=${id}`;
+      const sql = `select * from products_order where id='${id}'`;
       const result = await conn.query(sql);
       if (result.rows.length) {
         conn.release();
@@ -62,7 +62,7 @@ export class DashboardQueries {
       throw new Error('id is required');
     }
     try {
-      const sql = `delete from products_order where id=${id}`;
+      const sql = `delete from products_order where order_id=${id}`;
       const conn: PoolClient = await client.connect();
       const result = await conn.query(sql);
       conn.release();
