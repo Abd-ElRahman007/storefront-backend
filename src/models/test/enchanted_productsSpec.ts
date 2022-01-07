@@ -7,14 +7,25 @@ const request = supertest(app);
 const store: ProductsStore = new ProductsStore();
 
 describe('enchanted_products store model', (): void => {
-  it('should index method be defined', (): void => {
-    expect(store.index).toBeDefined();
+  it('should create method create a product',async ():Promise <void> => {
+    const product = {
+      name: 'test2',
+      price: 99
+    }
+    const result = await store.create(product);
+    expect(result.name).toBe('test2');
   });
-  it('should show method be defined', (): void => {
-    expect(store.show).toBeDefined();
+  it('should index method index all product',async ():Promise <void> => {
+    const result = await store.index();
+    expect(result[0].name).toBe('test2');
   });
-  it('should create method be defined', (): void => {
-    expect(store.create).toBeDefined();
+  it('should show method show a product',async ():Promise <void> => {
+    const result = await store.show('test2');
+    expect(result?.price).toBe(99);
+  });
+  it('should delete method delete a product', async (): Promise<void> => {
+    const result = await store.delete('test2');
+    expect(result.name).toBe('test2');
   });
 })
 describe('enchanted_products store handlers', (): void => {
