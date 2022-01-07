@@ -11,17 +11,39 @@ const users_store: UsersStore = new UsersStore();
 const products_store: ProductsStore = new ProductsStore();
 
 describe('orders store model', (): void => {
-  it('should index method be defined', (): void => {
-    expect(store.index).toBeDefined();
+  it('should create method create an order',async (): Promise<void> => {
+    const user = {
+      id:54,
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test'
+    };
+    const resultuser = await users_store.createId(user);
+    const product = {
+      name: 'test5',
+      price: 5,
+    };
+    const result = await products_store.create(product);
+    const order = {
+      id_user: 54,
+      status: 'active',
+    };
+    const resultorder = await store.create(order);
+    expect(resultorder.id_user).toBe(54);
   });
-  it('should show method be defined', (): void => {
-    expect(store.show).toBeDefined();
+  it('should index method index all orders',async (): Promise<void> => {
+    const result = await store.index();
+    expect(result[0].status).toBe('active');
   });
-  it('should create method be defined', (): void => {
-    expect(store.create).toBeDefined();
+  it('should show method show an order',async (): Promise<void> => {
+    const result = await store.show(54);
+    expect(result?.id_user).toBe(54);
   });
-  it('should delete method be defined', (): void => {
-    expect(store.delete).toBeDefined();
+  it('should delete method delete an order',async (): Promise<void> => {
+    const result = await store.delete(54);
+    const result2 = await users_store.delete('test', 'test');
+    const result3 = await products_store.delete('test5');
+    expect(result.id_user).toBe(54);
   });
 })
 describe('orders store handlers', (): void => {

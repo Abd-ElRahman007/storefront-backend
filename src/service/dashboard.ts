@@ -27,13 +27,13 @@ export class DashboardQueries {
       throw new Error(`cannot add new productOrder ${o.product_id}. error: ${error}`);
     }
   }
-  async showOrder(id: productOrders): Promise<productOrders | null> {
+  async showOrder(id: number): Promise<productOrders | null> {
     if (!id) {
       throw new Error('id is required');
     }
     try {
       const conn = await client.connect();
-      const sql = `select * from products_order where id='${id}'`;
+      const sql = `select * from products_order where order_id='${id}'`;
       const result = await conn.query(sql);
       if (result.rows.length) {
         conn.release();
