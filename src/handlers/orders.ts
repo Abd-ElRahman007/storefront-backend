@@ -87,7 +87,7 @@ const verifyToken = (req: Request, res: Response, next: any): void => {
 }
 
 const orders_routes = (app: express.Application): void => {
-  app.get('/orders', index);
+  app.get('/orders',verifyToken, index);
   app.post('/orders/create/:id', verifyToken, create);
   app.post('/orders/show/:id_user', verifyToken, show);
   app.delete('/orders/delete/:id_user', delete_);
