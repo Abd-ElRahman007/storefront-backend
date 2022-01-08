@@ -27,6 +27,27 @@ describe('enchanted_products store model', (): void => {
     const result = await store.delete('test2');
     expect(result.name).toBe('test2');
   });
+  it('should createId method create a product', async (): Promise<void> => {
+    const product = {
+      id:30,
+      name: 'test',
+      price: 99
+    }
+    const result = await store.createId(product);
+    expect(result.name).toBe('test');
+  })
+  it('should showId method show a product', async (): Promise<void> => {
+    const result = await store.showId(30);
+    expect(result?.name).toBe('test');
+  });
+  it('should delete method delete a product', async (): Promise<void> => {
+    const product = {
+      name: 'test',
+      price: 99
+    }
+    const result = await store.delete(product.name);
+    expect(result.name).toBe('test');
+  })
 })
 describe('enchanted_products store handlers', (): void => {
   it('should create method create a product', async (done): Promise<void> => {

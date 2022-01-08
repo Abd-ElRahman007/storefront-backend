@@ -46,6 +46,29 @@ describe('users store model', (): void => {
     const result = await store.delete(user.firstname, user.password);
     expect(result?.firstname).toBe(user.firstname);
   });
+  it('should createId model create a user', async (): Promise<void> => {
+    const user = {
+      id:35,
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test',
+    }
+    const result = await store.createId(user);
+    expect(result.firstname).toBe(user.firstname);
+  })
+  it('should showId model show a user', async (): Promise<void> => {
+    const result = await store.showId(35);
+    expect(result?.firstname).toBe('test');
+  });
+  it('should delete model delete a user', async (): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test',
+    }
+    const result = await store.delete(user.firstname, user.password);
+    expect(result?.firstname).toBe(user.firstname);
+  });
 })
 describe('users store handlers', (): void => {
   it('should create method create a user', async (done): Promise<void> => {
@@ -66,6 +89,16 @@ describe('users store handlers', (): void => {
     }
     const key = await request.post('/users/createToken').send(user);
     const result = await request.get('/users').set('Authorization', `Bearer ${key.text}`);
+    expect(result.status).toBe(200);
+    done();
+  })
+  it('should createToken method recreate the token', async (done): Promise<void> => {
+    const user = {
+      firstname: 'test',
+      password: 'test',
+      lastname: 'test',
+    }
+    const result = await request.post('/users/createToken').send(user);
     expect(result.status).toBe(200);
     done();
   })
